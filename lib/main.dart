@@ -42,6 +42,7 @@ class MyApp extends StatelessWidget {
     MaterialColor appColor = MaterialColor(0xffe64219, pokeballRedSwatch);
     return MaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: appColor,
       ),

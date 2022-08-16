@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import '../auth/auth_service.dart';
@@ -38,11 +39,12 @@ class _LoginPageState extends State<LoginPage> {
           child: Form(
               key: formKey,
               child: ListView(
+                padding: EdgeInsets.all(15),
                 shrinkWrap: true,
                 children: [
 
                   const Text(
-                    "Admin Login",
+                    "Welcome User!",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         fontSize: 22,
@@ -65,78 +67,73 @@ class _LoginPageState extends State<LoginPage> {
                   ),
 
                   // todo This is email textField section
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: TextFormField(
-                      controller: emailController,
-                      style: const TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.w500),
-                      decoration: InputDecoration(
-                          filled: true,
-                          fillColor: const Color(0xffe6e6e6),
-                          contentPadding: const EdgeInsets.only(left: 10),
-                          focusColor: Colors.white,
-                          prefixIcon: const Icon(
-                            Icons.email,
-                          ),
-                          hintText: "Enter your email",
-                          hintStyle: TextStyle(
-                              color: Colors.grey, fontWeight: FontWeight.normal),
-                          border: OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                              borderRadius: BorderRadius.circular(20))),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'This field must not be empty';
-                        } else {
-                          return null;
-                        }
-                      },
-                    ),
+                  TextFormField(
+                    controller: emailController,
+                    style: const TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.w500),
+                    decoration: InputDecoration(
+                        filled: true,
+                        fillColor: const Color(0xffe6e6e6),
+                        contentPadding: const EdgeInsets.only(left: 10),
+                        focusColor: Colors.white,
+                        prefixIcon: const Icon(
+                          Icons.email,
+                        ),
+                        hintText: "Enter your email",
+                        hintStyle: TextStyle(
+                            color: Colors.grey, fontWeight: FontWeight.normal),
+                        border: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.circular(20))),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'This field must not be empty';
+                      } else {
+                        return null;
+                      }
+                    },
                   ),
+                  SizedBox(height: 15,),
 
                   // todo this is password textField section
-                  Padding(
-                    padding: const EdgeInsets.only(top: 8, left: 8, right: 8),
-                    child: TextFormField(
-                      obscureText: _isObscure,
-                      controller: passwordController,
-                      style: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.w500),
-                      decoration: InputDecoration(
-                          filled: true,
-                          fillColor: Color(0xffe6e6e6),
-                          contentPadding: EdgeInsets.only(left: 10),
-                          focusColor: Colors.white,
-                          prefixIcon: Icon(
-                            Icons.lock,
+                  TextFormField(
+                    obscureText: _isObscure,
+                    controller: passwordController,
+                    style: TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.w500),
+                    decoration: InputDecoration(
+                        filled: true,
+                        fillColor: Color(0xffe6e6e6),
+                        contentPadding: EdgeInsets.only(left: 10),
+                        focusColor: Colors.white,
+                        prefixIcon: Icon(
+                          Icons.lock,
+                        ),
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            _isObscure
+                                ? Icons.visibility_off
+                                : Icons.visibility,
                           ),
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              _isObscure
-                                  ? Icons.visibility_off
-                                  : Icons.visibility,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _isObscure = !_isObscure;
-                              });
-                            },
-                          ),
-                          hintText: "Enter your password",
-                          hintStyle: TextStyle(
-                              color: Colors.grey, fontWeight: FontWeight.normal),
-                          border: OutlineInputBorder(
-                              borderSide: BorderSide.none,
-                              borderRadius: BorderRadius.circular(20))),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'This field must not be empty';
-                        } else {
-                          return null;
-                        }
-                      },
-                    ),
+                          onPressed: () {
+                            setState(() {
+                              _isObscure = !_isObscure;
+                            });
+                          },
+                        ),
+                        hintText: "Enter your password",
+                        hintStyle: TextStyle(
+                            color: Colors.grey, fontWeight: FontWeight.normal),
+                        border: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.circular(20))),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'This field must not be empty';
+                      } else {
+                        return null;
+                      }
+                    },
                   ),
 
                   Align(
@@ -146,17 +143,14 @@ class _LoginPageState extends State<LoginPage> {
                           child: Text(
                             "forget password?",
                           ))),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      _errorMessage,
-                      style: TextStyle(color: Colors.red),
-                    ),
-                  ),
+                 Text(
+                   _errorMessage,
+                   style: TextStyle(color: Colors.red),
+                 ),
 
                   Padding(
                     padding:
-                    const EdgeInsets.symmetric(horizontal: 80, vertical: 20),
+                    const EdgeInsets.symmetric(horizontal: 80, vertical: 15),
                     child: ElevatedButton(
                         onPressed: _chechValidet,
                         style: ButtonStyle(
@@ -168,6 +162,46 @@ class _LoginPageState extends State<LoginPage> {
                           style: TextStyle(fontSize: 16),
                         )),
                   ),
+
+                  RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(children: [
+                      TextSpan(
+                        text: 'You have no account? ',
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),
+                      ),
+                      TextSpan(
+                          text: ' Sign UP',
+                          style: TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.w500),
+
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+
+                            //  Navigator.pushNamed(context, SignUpPage.routeName);
+
+                            }),
+                    ]),
+                  ),
+                  SizedBox(height: 15,),
+                  Text("Or signing with", textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16,letterSpacing: 1,wordSpacing: 1),),
+                  SizedBox(height: 15,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      InkWell(
+                        onTap: (){},
+                          child: Image.asset("assets/images/google.png",height: 30,width: 30,fit: BoxFit.cover,)),
+                      SizedBox(width: 15,),
+                      InkWell(
+                        onTap: (){},
+                          child: Image.asset("assets/images/facebook.png",height: 30,width: 30,fit: BoxFit.cover,))
+                    ],
+                  )
+
+
+
 
                 ],
               )),
