@@ -1,4 +1,5 @@
 
+import 'package:e_commerce_user_app/widgets/main_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/product_provider.dart';
@@ -15,6 +16,7 @@ class ProductPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Product"),
       ),
+      drawer: MainDrawer(),
 
 
       body: Consumer<ProductProvider>(

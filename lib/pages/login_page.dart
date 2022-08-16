@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:e_commerce_user_app/pages/phone_verification.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -179,7 +180,7 @@ class _LoginPageState extends State<LoginPage> {
                           recognizer: TapGestureRecognizer()
                             ..onTap = () {
 
-                            //  Navigator.pushNamed(context, SignUpPage.routeName);
+                              Navigator.pushNamed(context, PhoneVerification.routeName);
 
                             }),
                     ]),
