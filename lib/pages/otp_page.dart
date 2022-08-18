@@ -1,5 +1,6 @@
-import 'package:e_commerce_user_app/pages/login_page.dart';
-import 'package:e_commerce_user_app/pages/phone_verification.dart';
+import 'package:e_commerce_user_app/auth/auth_service.dart';
+import 'package:e_commerce_user_app/pages/regestration_page.dart';
+import 'package:e_commerce_user_app/widgets/show_loading.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
@@ -15,14 +16,26 @@ class OtpPage extends StatefulWidget {
   TextEditingController codeController = TextEditingController();
 
 class _OtpPageState extends State<OtpPage> {
+  List list = [];
+  String? vid;
+  String? phoneNumber;
+  @override
+  void didChangeDependencies() {
+   list = ModalRoute.of(context)!.settings.arguments as List;
+   phoneNumber = list[0];
+   vid = list[1];
+    super.didChangeDependencies();
+  }
   @override
   void dispose() {
 
     super.dispose();
   }
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -36,6 +49,7 @@ class _OtpPageState extends State<OtpPage> {
         ),
       ),
       body: ListView(
+        padding: EdgeInsets.symmetric(horizontal: 20),
         children: [
           Image.asset(
             "assets/images/veryfi.jpg",
@@ -55,62 +69,65 @@ class _OtpPageState extends State<OtpPage> {
           ),
           SizedBox(height: 10,),
           Text("Enter your 6 digit otp code numbers",textAlign: TextAlign.center,style: TextStyle(color: Colors.grey),),
+
           SizedBox(height: 40,),
 
 
 
 
 
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: PinCodeTextField(
+          PinCodeTextField(
 
 
-              appContext: context,
-              length: 6,
-              obscureText: false,
-              animationType: AnimationType.fade,
-              pinTheme: PinTheme(
-                shape: PinCodeFieldShape.box,
-                borderRadius: BorderRadius.circular(5),
-                fieldHeight: 50,
-                fieldWidth: 45,
-                inactiveFillColor: Colors.white,
-                activeFillColor: Colors.white,
-                inactiveColor: Theme.of(context).primaryColor,
-                selectedColor: Theme.of(context).primaryColor,
-                selectedFillColor: Theme.of(context).primaryColor.withOpacity(0.1)
-              ),
-              animationDuration: Duration(milliseconds: 300),
-
-              enableActiveFill: true,
-
-              controller: codeController,
-              onCompleted: (v) {
-                print("Completed");
-              },
-              onChanged: (value) {
-                print(value);
-                setState(() {
-                 // currentText = value;
-                });
-              },
-              beforeTextPaste: (text) {
-                print("Allowing to paste $text");
-                 return true;
-              },
+            appContext: context,
+            length: 6,
+            obscureText: false,
+            animationType: AnimationType.fade,
+            pinTheme: PinTheme(
+              shape: PinCodeFieldShape.box,
+              borderRadius: BorderRadius.circular(5),
+              fieldHeight: 50,
+              fieldWidth: 45,
+              inactiveFillColor: Colors.white70,
+              activeFillColor: Colors.white70,
+              inactiveColor: Colors.green,
+              selectedColor: Colors.green,
+              selectedFillColor: Colors.white70
             ),
+            animationDuration: Duration(milliseconds: 300),
+
+            enableActiveFill: true,
+
+            controller: codeController,
+            onCompleted: (v) {
+
+            },
+            onChanged: (value) {
+
+              setState(() {
+               // currentText = value;
+              });
+            },
+            beforeTextPaste: (text) {
+              print("Allowing to paste $text");
+               return true;
+            },
           ),
+          _isLoading? ShowLoading(): SizedBox(height: 70,),
 
           Padding(
             padding: const EdgeInsets.symmetric(
-                horizontal: 80, vertical: 15),
+                horizontal: 80, vertical: 0),
             child: ElevatedButton(
                 onPressed: (){
-                  final PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: vid, smsCode: codeController.text);
+                  setState(() {
+                    _isLoading = true;
+                  });
+                  final PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: vid!, smsCode: codeController.text);
                   FirebaseAuth.instance.signInWithCredential(credential).then((userCredential) {
                     if(userCredential.user != null){
-                      Navigator.pushReplacementNamed(context, LoginPage.routeName);
+                      AuthService.deleteCurrentUser().then((value) => Navigator.pushReplacementNamed(context, RegistrationPage.routeName, arguments: phoneNumber));
+
                     }
 
                   });

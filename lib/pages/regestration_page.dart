@@ -1,40 +1,47 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:e_commerce_user_app/pages/otp_page.dart';
 import 'package:e_commerce_user_app/pages/phone_verification.dart';
-import 'package:e_commerce_user_app/pages/regestration_page.dart';
 import 'package:e_commerce_user_app/widgets/show_loading.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:loading_indicator/loading_indicator.dart';
 
 import '../auth/auth_service.dart';
 import 'launcher_page.dart';
 
-class LoginPage extends StatefulWidget {
-  static const routeName = "login-page";
-  const LoginPage({Key? key}) : super(key: key);
+class RegistrationPage extends StatefulWidget {
+  static const routeName = "registration-page";
+  const RegistrationPage({Key? key}) : super(key: key);
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<RegistrationPage> createState() => _RegistrationPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _RegistrationPageState extends State<RegistrationPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final namedController = TextEditingController();
+  final phoneController = TextEditingController();
+
+  @override
+  void didChangeDependencies() {
+    final phone = ModalRoute.of(context)!.settings.arguments as String;
+    phoneController.text = phone;
+    super.didChangeDependencies();
+  }
 
   final formKey = GlobalKey<FormState>();
   String _errorMessage = "";
-  bool _isloading = false;
+  bool _isLoading = false;
 
   @override
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
+    namedController.dispose();
+    phoneController.dispose();
     super.dispose();
   }
-
 
   bool _isObscure = true;
   @override
@@ -49,27 +56,77 @@ class _LoginPageState extends State<LoginPage> {
                 padding: EdgeInsets.all(15),
                 shrinkWrap: true,
                 children: [
-                  const Text(
-                    "Welcome User!",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1,
-                        wordSpacing: 2,
-                        fontStyle: FontStyle.normal),
-                  ),
                   const SizedBox(
                     height: 20,
                   ),
                   Image.asset(
                     "assets/images/login.jpg",
-                    height: 230,
+                    height: 200,
                     width: double.infinity,
                     fit: BoxFit.fitHeight,
                   ),
                   SizedBox(
                     height: 20,
+                  ),
+                  TextFormField(
+                    controller: namedController,
+                    style: const TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.w500),
+                    decoration: InputDecoration(
+                        filled: true,
+                        fillColor: const Color(0xffe6e6e6),
+                        contentPadding: const EdgeInsets.only(left: 10),
+                        focusColor: Colors.white,
+                        prefixIcon: const Icon(
+                          Icons.account_circle,
+                        ),
+                        hintText: "Enter your full name",
+                        hintStyle: TextStyle(
+                            color: Colors.grey, fontWeight: FontWeight.normal),
+                        border: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.circular(20))),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'This field must not be empty';
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+
+                  TextFormField(
+                    controller: phoneController,
+                    enabled: false,
+                    style: const TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.w500),
+                    decoration: InputDecoration(
+                        filled: true,
+                        fillColor: const Color(0xffe6e6e6),
+                        contentPadding: const EdgeInsets.only(left: 10),
+                        focusColor: Colors.white,
+                        prefixIcon: const Icon(
+                          Icons.phone,
+                        ),
+                        hintText: "Enter your phone number",
+                        hintStyle: TextStyle(
+                            color: Colors.grey, fontWeight: FontWeight.normal),
+                        border: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.circular(20))),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'This field must not be empty';
+                      } else {
+                        return null;
+                      }
+                    },
+                  ),
+                  SizedBox(
+                    height: 15,
                   ),
 
                   // todo This is email textField section
@@ -85,7 +142,7 @@ class _LoginPageState extends State<LoginPage> {
                         prefixIcon: const Icon(
                           Icons.email,
                         ),
-                        hintText: "Enter your email",
+                        hintText: "Enter your email address",
                         hintStyle: TextStyle(
                             color: Colors.grey, fontWeight: FontWeight.normal),
                         border: OutlineInputBorder(
@@ -144,50 +201,39 @@ class _LoginPageState extends State<LoginPage> {
                     },
                   ),
 
-                  Align(
-                      alignment: Alignment.topRight,
-                      child: TextButton(
-                          onPressed: () {},
-                          child: Text(
-                            "forget password?",
-                          ))),
-                  _isloading
-                      ?  ShowLoading()
-                      :  Text(
-                    _errorMessage,
-                    style: TextStyle(color: Colors.red),
-                  ),
+                  _isLoading
+                      ? ShowLoading()
+                      : Text(
+                          _errorMessage,
+                          style: TextStyle(color: Colors.red),
+                        ),
 
-                   Padding(
-                    padding:   EdgeInsets.symmetric(
-                        horizontal:  100, vertical: 15),
-                    child:  ElevatedButton(
-                            onPressed: () {
-                              _chechValidet();
-
-                            },
-                            style: ButtonStyle(
-                                shape: MaterialStateProperty.all(
-                                    RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20)))),
-                            child: Text(
-                              "LogIn",
-                              style: TextStyle(fontSize: 16),
-                            )),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 80, vertical: 15),
+                    child: ElevatedButton(
+                        onPressed: _chechValidet,
+                        style: ButtonStyle(
+                            shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20)))),
+                        child: Text(
+                          "SignUp",
+                          style: TextStyle(fontSize: 16),
+                        )),
                   ),
 
                   RichText(
                     textAlign: TextAlign.center,
                     text: TextSpan(children: [
                       TextSpan(
-                        text: 'You have no account? ',
+                        text: 'You have an account? ',
                         style: TextStyle(
                           color: Colors.black,
                         ),
                       ),
                       TextSpan(
-                          text: ' Sign UP',
+                          text: 'Login',
                           style: TextStyle(
                               color: Theme.of(context).primaryColor,
                               fontWeight: FontWeight.w500),
@@ -199,8 +245,9 @@ class _LoginPageState extends State<LoginPage> {
                     ]),
                   ),
                   SizedBox(
-                    height: 15,
+                    height: 10,
                   ),
+                  Divider(),
                   Text(
                     "Or signing with",
                     textAlign: TextAlign.center,
@@ -210,8 +257,9 @@ class _LoginPageState extends State<LoginPage> {
                         letterSpacing: 1,
                         wordSpacing: 1),
                   ),
+                  Divider(),
                   SizedBox(
-                    height: 15,
+                    height: 10,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -247,28 +295,21 @@ class _LoginPageState extends State<LoginPage> {
   void _chechValidet() async {
     if (formKey.currentState!.validate()) {
       setState(() {
-        _isloading = true;
+        _isLoading = true;
       });
-
       try {
-        final status = await AuthService.login(
-            emailController.text, passwordController.text);
-        if (status) {
-          if (mounted) {
 
-            Navigator.pushReplacementNamed(context, LauncherPage.routeName);
-          }
-        } else {
-          AuthService.logout();
-          setState(() {
-            _isloading = false;
-          });
-          _errorMessage = "You are not admin";
-        }
+        AuthService.register(
+          namedController.text,
+          phoneController.text,
+          emailController.text,
+          passwordController.text,
+        ).then((value) => Navigator.pushNamedAndRemoveUntil(context, LauncherPage.routeName, (route) => false));
+
       } on FirebaseAuthException catch (e) {
         setState(() {
           setState(() {
-            _isloading = false;
+            _isLoading = false;
           });
           _errorMessage = e.message!;
         });

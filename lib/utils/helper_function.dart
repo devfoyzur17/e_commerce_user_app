@@ -6,3 +6,4 @@ String getFormatedDateTime(DateTime dateTime, String pattern)=>
 
 showMsg(BuildContext context, String  msg)=>
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg),));
+

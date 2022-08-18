@@ -24,13 +24,20 @@ class MainDrawer extends StatelessWidget {
                 ListTile(
                   onTap: (){
 
+                  },
+                  leading: Icon(Icons.account_circle),
+                  title: Text("Profile"),
+                ),
+                ListTile(
+                  onTap: (){
+
                     AuthService.logout();
                     
                     Navigator.pushReplacementNamed(context, LauncherPage.routeName);
                   },
                   leading: Icon(Icons.logout),
                   title: Text("LogOut"),
-                )
+                ),
               ],
             ))
         ],

@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../models/user_model.dart';
+
 class DBHelper {
   static String collectionCategory = "Category";
   static String collectionProducts = "Products";
-
   static String collectionUsers = "User";
   static String collectionOrder = "Order";
   static String collectionOrderDetails = "OrderDetails";
@@ -27,4 +28,20 @@ class DBHelper {
   static Stream<DocumentSnapshot<Map<String, dynamic>>> getProductById(
           String id) =>
       _db.collection(collectionProducts).doc(id).snapshots();
+
+  static Future<void> addUser(UserModel usersModel) {
+    return _db
+        .collection(collectionUsers)
+        .doc(usersModel.uid)
+        .set(usersModel.toMap());
+  }
+
+  static Stream<DocumentSnapshot<Map<String, dynamic>>> getUserByUid(
+      String uid) {
+    return _db.collection(collectionUsers).doc(uid).snapshots();
+  }
+
+  static Future<void> updateProfile(String uid, Map<String, dynamic> map) {
+    return _db.collection(collectionUsers).doc(uid).update(map);
+  }
 }

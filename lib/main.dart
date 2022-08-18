@@ -4,8 +4,10 @@ import 'package:e_commerce_user_app/pages/otp_page.dart';
 import 'package:e_commerce_user_app/pages/phone_verification.dart';
 import 'package:e_commerce_user_app/pages/product_details_page.dart';
 import 'package:e_commerce_user_app/pages/products_page.dart';
+import 'package:e_commerce_user_app/pages/regestration_page.dart';
 import 'package:e_commerce_user_app/providers/order_provider.dart';
 import 'package:e_commerce_user_app/providers/product_provider.dart';
+import 'package:e_commerce_user_app/providers/user_provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +21,10 @@ void main() async {
     ),
     ChangeNotifierProvider(
       create: (context) => OrderProvider(),
-    )
+    ),
+    ChangeNotifierProvider(
+      create: (context) => UserProvider(),
+    ),
   ], child: const MyApp()));
 }
 
@@ -56,6 +61,7 @@ class MyApp extends StatelessWidget {
         ProductDetailsPage.routeName: (context) => ProductDetailsPage(),
         PhoneVerification.routeName: (context) =>   PhoneVerification(),
         OtpPage.routeName: (context) => const  OtpPage(),
+        RegistrationPage.routeName: (context) => const  RegistrationPage(),
       },
     );
   }

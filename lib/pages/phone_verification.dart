@@ -1,4 +1,5 @@
 import 'package:e_commerce_user_app/pages/otp_page.dart';
+import 'package:e_commerce_user_app/widgets/show_loading.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -11,12 +12,18 @@ class PhoneVerification extends StatefulWidget {
   @override
   State<PhoneVerification> createState() => _PhoneVerificationState();
 }
-String vid = "";
 
 class _PhoneVerificationState extends State<PhoneVerification> {
   final phoneController = TextEditingController();
 
+  bool _isLoading = false;
+  String vid = "";
+
   final formKey = GlobalKey<FormState>();
+  bool isLoading=false;
+
+  String? _errorText = "";
+
   @override
   void dispose() {
     phoneController.dispose();
@@ -70,7 +77,7 @@ class _PhoneVerificationState extends State<PhoneVerification> {
 
                 // todo This is phone textField section
                 TextFormField(
-                  controller: phoneController,
+                  controller: phoneController.. text="+880",
                   style: const TextStyle(
                       color: Colors.black, fontWeight: FontWeight.w500),
                   decoration: InputDecoration(
@@ -95,8 +102,10 @@ class _PhoneVerificationState extends State<PhoneVerification> {
                     }
                   },
                 ),
-                SizedBox(
-                  height: 15,
+
+
+             SizedBox(
+                  height: 20,
                 ),
 
                 Padding(
@@ -115,7 +124,8 @@ class _PhoneVerificationState extends State<PhoneVerification> {
                         style: TextStyle(fontSize: 16),
                       )),
                 ),
-                SizedBox(height: 100,),
+                _isLoading? ShowLoading() :
+                Text(_errorText.toString(), style: TextStyle(color: Colors.red),),
               ],
             )),
       ),
@@ -123,20 +133,31 @@ class _PhoneVerificationState extends State<PhoneVerification> {
   }
 
   _veryfay() async {
+    setState(() {
+      _isLoading = true;
+    });
+     final phone = phoneController.text;
 
     await FirebaseAuth.instance.verifyPhoneNumber(
-      phoneNumber: phoneController.text,
+      phoneNumber: phone,
       verificationCompleted: (PhoneAuthCredential credential) {
         print("complete");
       },
-      verificationFailed: (FirebaseAuthException e) {},
+      verificationFailed: (FirebaseAuthException e) {
+        setState(() {
+          _errorText = "Phone verification failed. please try again!";
+          _isLoading = false;
+        });
+      },
       codeSent: (String verificationId, int? resendToken) {
         setState(() {
           codeController.text = "";
           vid = verificationId;
         });
 
-        Navigator.pushNamed(context, OtpPage.routeName);
+
+
+        Navigator.pushNamed(context, OtpPage.routeName, arguments: [phone, vid]);
       },
       codeAutoRetrievalTimeout: (String verificationId) {},
     );
