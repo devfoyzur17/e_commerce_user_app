@@ -1,4 +1,5 @@
 
+import 'package:e_commerce_user_app/widgets/custom_slider.dart';
 import 'package:e_commerce_user_app/widgets/main_drawer.dart';
 import 'package:e_commerce_user_app/widgets/show_loading.dart';
 import 'package:flutter/material.dart';
@@ -47,11 +48,12 @@ class _ProductPageState extends State<ProductPage> {
 
           )
               : Column(
-                children: [
 
+                children: [
+                  const AppSlider(),
                   SizedBox(
                     width: double.infinity,
-                    height: 80,
+                    height: 70,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: provider.categoryList.length,
@@ -60,9 +62,12 @@ class _ProductPageState extends State<ProductPage> {
                         return Padding(
                           padding: const EdgeInsets.all(5.0),
                           child: ChoiceChip(
-                            elevation: 3,
+                            elevation: 2,
+
+                            backgroundColor: Color(0xfff2f2f2),
+
                             selectedShadowColor: Theme.of(context).primaryColor,
-                            selectedColor: Theme.of(context).primaryColor.withOpacity(0.8),
+                            selectedColor: Colors.deepOrange,
                             label: Text(category.catName!),
                             selected: _chipValue == index,
                             onSelected: (value){
@@ -82,7 +87,7 @@ class _ProductPageState extends State<ProductPage> {
             padding:const EdgeInsets.only(left: 5,right: 5,top: 5),
                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       childAspectRatio: 4/5,
-                        crossAxisCount: 3, crossAxisSpacing: 0, mainAxisSpacing: 0),
+                        crossAxisCount: 3, crossAxisSpacing: 0, mainAxisSpacing: 5),
                     itemCount: provider.productList.length,
                     itemBuilder: (context, index) => ProductItem(product: provider.productList[index])),
                   ),
