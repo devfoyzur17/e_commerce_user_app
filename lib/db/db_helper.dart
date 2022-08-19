@@ -29,11 +29,11 @@ class DBHelper {
           String id) =>
       _db.collection(collectionProducts).doc(id).snapshots();
 
-  static Future<void> addUser(UserModel usersModel) {
+  static Future<void> addUser(UserModel userModel) {
     return _db
         .collection(collectionUsers)
-        .doc(usersModel.uid)
-        .set(usersModel.toMap());
+        .doc(userModel.uid)
+        .set(userModel.toMap());
   }
 
   static Stream<DocumentSnapshot<Map<String, dynamic>>> getUserByUid(

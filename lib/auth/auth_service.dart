@@ -34,6 +34,8 @@ class AuthService {
             Timestamp.fromDate(credential.user!.metadata.creationTime!));
     return DBHelper.addUser(userModel);
   }
+  
+  static Future<void> addUser(UserModel userModel) => DBHelper.addUser(userModel);
 
   static Future<void> deleteCurrentUser() => _auth.currentUser!.delete();
 

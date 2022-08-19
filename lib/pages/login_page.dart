@@ -1,14 +1,13 @@
 // ignore_for_file: prefer_const_constructors
 
-import 'package:e_commerce_user_app/pages/otp_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:e_commerce_user_app/models/user_model.dart';
 import 'package:e_commerce_user_app/pages/phone_verification.dart';
-import 'package:e_commerce_user_app/pages/regestration_page.dart';
 import 'package:e_commerce_user_app/widgets/show_loading.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:loading_indicator/loading_indicator.dart';
-
+import 'package:google_sign_in/google_sign_in.dart';
 import '../auth/auth_service.dart';
 import 'launcher_page.dart';
 
@@ -34,7 +33,6 @@ class _LoginPageState extends State<LoginPage> {
     passwordController.dispose();
     super.dispose();
   }
-
 
   bool _isObscure = true;
   @override
@@ -152,29 +150,27 @@ class _LoginPageState extends State<LoginPage> {
                             "forget password?",
                           ))),
                   _isloading
-                      ?  ShowLoading()
-                      :  Text(
-                    _errorMessage,
-                    style: TextStyle(color: Colors.red),
-                  ),
+                      ? ShowLoading()
+                      : Text(
+                          _errorMessage,
+                          style: TextStyle(color: Colors.red),
+                        ),
 
-                   Padding(
-                    padding:   EdgeInsets.symmetric(
-                        horizontal:  100, vertical: 15),
-                    child:  ElevatedButton(
-                            onPressed: () {
-                              _chechValidet();
-
-                            },
-                            style: ButtonStyle(
-                                shape: MaterialStateProperty.all(
-                                    RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(20)))),
-                            child: Text(
-                              "LogIn",
-                              style: TextStyle(fontSize: 16),
-                            )),
+                  Padding(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 100, vertical: 15),
+                    child: ElevatedButton(
+                        onPressed: () {
+                          _chechValidet();
+                        },
+                        style: ButtonStyle(
+                            shape: MaterialStateProperty.all(
+                                RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20)))),
+                        child: Text(
+                          "LogIn",
+                          style: TextStyle(fontSize: 16),
+                        )),
                   ),
 
                   RichText(
@@ -217,7 +213,29 @@ class _LoginPageState extends State<LoginPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            signInWithGoogle().then((value) {
+                              if (value.user != null) {
+                                final userModel = UserModel(
+                                  uid: value.user!.uid,
+                                  email: value.user!.email!,
+                                  name: value.user!.displayName ??
+                                      "No name available",
+                                  mobile: value.user!.phoneNumber ??
+                                      "No phone number Available",
+                                  userCreationTime: Timestamp.fromDate(
+                                      value.user!.metadata.creationTime!),
+                                );
+                                AuthService.addUser(userModel).then((value) =>
+                                    Navigator.pushReplacementNamed(
+                                        context, LauncherPage.routeName));
+                              }
+                            }).catchError((error) {
+                              setState(() {
+                                _errorMessage = error.toString();
+                              });
+                            });
+                          },
                           child: Image.asset(
                             "assets/images/google.png",
                             height: 30,
@@ -255,7 +273,6 @@ class _LoginPageState extends State<LoginPage> {
             emailController.text, passwordController.text);
         if (status) {
           if (mounted) {
-
             Navigator.pushReplacementNamed(context, LauncherPage.routeName);
           }
         } else {
@@ -274,5 +291,23 @@ class _LoginPageState extends State<LoginPage> {
         });
       }
     }
+  }
+
+  Future<UserCredential> signInWithGoogle() async {
+    // Trigger the authentication flow
+    final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+    // Obtain the auth details from the request
+    final GoogleSignInAuthentication? googleAuth =
+        await googleUser?.authentication;
+
+    // Create a new credential
+    final credential = GoogleAuthProvider.credential(
+      accessToken: googleAuth?.accessToken,
+      idToken: googleAuth?.idToken,
+    );
+
+    // Once signed in, return the UserCredential
+    return await FirebaseAuth.instance.signInWithCredential(credential);
   }
 }
