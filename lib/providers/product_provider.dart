@@ -13,11 +13,13 @@ class ProductProvider extends ChangeNotifier {
   List<ProductModel> productList = [];
   List<PurchaseModel> purchaseListOfSpecificProduct = [];
   List<CategoryModel> categoryList = [];
+  List<String> categoryNameList = [];
 
   getAllCategories() {
     DBHelper.getAllCategories().listen((event) {
       categoryList = List.generate(event.docs.length,
           (index) => CategoryModel.fromMap(event.docs[index].data()));
+      categoryNameList = List.generate(categoryNameList.length, (index) => categoryList[index].catName!);
       notifyListeners();
     });
   }

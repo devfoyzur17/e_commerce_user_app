@@ -17,26 +17,36 @@ class ProductItem extends StatelessWidget {
       },
       child: Card(
         elevation: 2,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
         child: Container(
+          padding: EdgeInsets.all(3),
           decoration: BoxDecoration(
-              color: Colors.white, borderRadius: BorderRadius.circular(20)),
+              color: Colors.white, borderRadius: BorderRadius.circular(15)),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            crossAxisAlignment: CrossAxisAlignment.center,
+
+
             children: [
               FadeInImage.assetNetwork(
-               image: product.imageUrl.toString(),
-                height: 100,
+                image: product.imageUrl.toString(),
+                height: 70,
                 placeholder: "assets/images/photos.png",
                 fadeInCurve: Curves.bounceInOut,
                 fadeInDuration: const Duration(seconds: 2),
               ),
+              SizedBox(height: 5,),
+
               Text(
-                product.name.toString(),
-                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 17),
+                product.name.toString(),textAlign: TextAlign.start,
+                style: TextStyle(fontWeight: FontWeight.w500, fontSize: 13),
               ),
-              Text("৳${product.salePrice}", style: TextStyle(color: Colors.red),)
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("৳${product.salePrice}", style: TextStyle(color: Colors.red,fontSize: 12),),
+                  IconButton(onPressed: (){}, icon: Icon(Icons.shopping_cart_outlined,size: 18,)),
+                ],
+              )
             ],
           ),
         ),

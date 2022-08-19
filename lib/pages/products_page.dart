@@ -1,20 +1,41 @@
 
 import 'package:e_commerce_user_app/widgets/main_drawer.dart';
+import 'package:e_commerce_user_app/widgets/show_loading.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/product_provider.dart';
 import '../widgets/product_item.dart';
 
 
-class ProductPage extends StatelessWidget {
+class ProductPage extends StatefulWidget {
   static const routeName = "product-page";
   const ProductPage({Key? key}) : super(key: key);
 
   @override
+  State<ProductPage> createState() => _ProductPageState();
+}
+
+class _ProductPageState extends State<ProductPage> {
+  late ProductProvider productProvider;
+  int _chipValue = 0;
+  @override
+  void didChangeDependencies() {
+    productProvider = Provider.of<ProductProvider>(context,listen: false);
+    productProvider.getAllProducts();
+    Provider.of<ProductProvider>(context,listen: false).getAllCategories();
+    super.didChangeDependencies();
+  }
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Product"),
+        title:  Text("Product",style: TextStyle(color: Colors.black),),
+        backgroundColor: Colors.white10,
+        elevation: 0,
+        iconTheme: IconThemeData(
+          color: Colors.black
+        ),
+
       ),
       drawer: MainDrawer(),
 
@@ -22,14 +43,51 @@ class ProductPage extends StatelessWidget {
       body: Consumer<ProductProvider>(
           builder: (context, provider, _) => provider.productList.isEmpty
               ? const Center(
-            child:Text("No product found"),
+            child: ShowLoading(),
+
           )
-              : GridView.builder(
+              : Column(
+                children: [
+
+                  SizedBox(
+                    width: double.infinity,
+                    height: 80,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: provider.categoryList.length,
+                      itemBuilder: (context, index) {
+                        final category = provider.categoryList[index];
+                        return Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: ChoiceChip(
+                            elevation: 3,
+                            selectedShadowColor: Theme.of(context).primaryColor,
+                            selectedColor: Theme.of(context).primaryColor.withOpacity(0.8),
+                            label: Text(category.catName!),
+                            selected: _chipValue == index,
+                            onSelected: (value){
+                              setState(() {
+                                _chipValue = value? index:0;
+                              });
+                            },
+                          ),
+                        );
+                      }),
+                  ),
+
+
+                  Expanded(
+                    child: GridView.builder(
+
             padding:const EdgeInsets.only(left: 5,right: 5,top: 5),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2, crossAxisSpacing: 5, mainAxisSpacing: 5),
-              itemCount: provider.productList.length,
-              itemBuilder: (context, index) => ProductItem(product: provider.productList[index])),),
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      childAspectRatio: 4/5,
+                        crossAxisCount: 3, crossAxisSpacing: 0, mainAxisSpacing: 0),
+                    itemCount: provider.productList.length,
+                    itemBuilder: (context, index) => ProductItem(product: provider.productList[index])),
+                  ),
+                ],
+              ),),
 
 
 

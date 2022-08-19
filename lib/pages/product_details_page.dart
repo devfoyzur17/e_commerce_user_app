@@ -70,52 +70,6 @@ class ProductDetailsPage extends StatelessWidget {
     );
   }
 
-  void _showPurchaseHistoryBottomSheet(BuildContext context) {
-    showModalBottomSheet(
-        context: context,
-        builder: (context) => Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: const Text(
-                    "Purchase History",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 17),
-                  ),
-                ),
-                Divider(),
-                Expanded(
-                  child: ListView.builder(
-                      itemCount: context
-                          .read<ProductProvider>()
-                          .purchaseListOfSpecificProduct
-                          .length,
-                      itemBuilder: (context, index) {
-                        final purchaseModel = context
-                            .read<ProductProvider>()
-                            .purchaseListOfSpecificProduct[index];
-                        return Column(
-                          children: [
-                            ListTile(
-
-                              title: Text(getFormatedDateTime(
-                                  purchaseModel.dateModel.timestamp.toDate(),
-                                  "dd/MM/yyyy")),
-                              subtitle: Text(
-                                  "Quantity: ${purchaseModel.quantity.toString()}"),
-                              trailing:
-                                  Text('৳ ${purchaseModel.purchaseprice} '),
-
-                            ),
-                            Divider(
-                              height: 2,
-                            ),
-                          ],
-                        );
-                      }),
-                ),
-              ],
-            ));
-  }
 
 
 

@@ -220,9 +220,9 @@ class _LoginPageState extends State<LoginPage> {
                                   uid: value.user!.uid,
                                   email: value.user!.email!,
                                   name: value.user!.displayName ??
-                                      "No name available",
+                                      "Name not available",
                                   mobile: value.user!.phoneNumber ??
-                                      "No phone number Available",
+                                      "Number not Available",
                                   userCreationTime: Timestamp.fromDate(
                                       value.user!.metadata.creationTime!),
                                 );
