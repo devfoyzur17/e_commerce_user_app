@@ -30,12 +30,10 @@ class _ProductPageState extends State<ProductPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:  Text("Product",style: TextStyle(color: Color(0xff666666)),),
-        backgroundColor: Colors.white10,
-        elevation: 0,
-        iconTheme: IconThemeData(
-          color: Color(0xff666666)
-        ),
+        title:  Text("Product",),
+
+       // elevation: 3,
+
         actions: [
 
           IconButton(onPressed: (){}, icon: ImageIcon(AssetImage("assets/images/filter.png")))
@@ -72,7 +70,7 @@ class _ProductPageState extends State<ProductPage> {
                             backgroundColor: Color(0xffEFEFEF),
 
                             selectedShadowColor: Color(0xffff8566),
-                            selectedColor: Color(0xffff8566),
+                            selectedColor: Theme.of(context).primaryColor,
                             label: Text(category),
                             selected: _chipValue == index,
                             onSelected: (value){
