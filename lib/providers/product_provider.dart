@@ -20,7 +20,8 @@ class ProductProvider extends ChangeNotifier {
     DBHelper.getAllCategories().listen((event) {
       categoryList = List.generate(event.docs.length,
           (index) => CategoryModel.fromMap(event.docs[index].data()));
-      categoryNameList = List.generate(categoryNameList.length, (index) => categoryList[index].catName!);
+      categoryNameList = List.generate(categoryList.length, (index) => categoryList[index].catName!);
+      categoryNameList.insert(0, "All");
 
 
       notifyListeners();

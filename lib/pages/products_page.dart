@@ -30,12 +30,17 @@ class _ProductPageState extends State<ProductPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:  Text("Product",style: TextStyle(color: Colors.black),),
+        title:  Text("Product",style: TextStyle(color: Color(0xff666666)),),
         backgroundColor: Colors.white10,
         elevation: 0,
         iconTheme: IconThemeData(
-          color: Colors.black
+          color: Color(0xff666666)
         ),
+        actions: [
+
+          IconButton(onPressed: (){}, icon: ImageIcon(AssetImage("assets/images/filter.png")))
+          
+        ],
 
       ),
       drawer: MainDrawer(),
@@ -56,25 +61,27 @@ class _ProductPageState extends State<ProductPage> {
                     height: 70,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
-                      itemCount: provider.categoryList.length,
+                      itemCount: provider.categoryNameList.length,
                       itemBuilder: (context, index) {
-                        final category = provider.categoryList[index];
+                        final category = provider.categoryNameList[index];
                         return Padding(
                           padding: const EdgeInsets.all(5.0),
                           child: ChoiceChip(
-                            elevation: 2,
+                            elevation: 5,
 
-                            backgroundColor: Color(0xfff2f2f2),
+                            backgroundColor: Color(0xffEFEFEF),
 
-                            selectedShadowColor: Theme.of(context).primaryColor,
-                            selectedColor: Colors.deepOrange,
-                            label: Text(category.catName!),
+                            selectedShadowColor: Color(0xffff8566),
+                            selectedColor: Color(0xffff8566),
+                            label: Text(category),
                             selected: _chipValue == index,
                             onSelected: (value){
                               setState(() {
                                 _chipValue = value? index:0;
                               });
                             },
+                            labelStyle: _chipValue == index ? TextStyle(color: Colors.white) : TextStyle(color: Color(0xff666666)),
+
                           ),
                         );
                       }),
@@ -87,7 +94,7 @@ class _ProductPageState extends State<ProductPage> {
             padding:const EdgeInsets.only(left: 5,right: 5,top: 5),
                     gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                       childAspectRatio: 4/5,
-                        crossAxisCount: 3, crossAxisSpacing: 0, mainAxisSpacing: 5),
+                        crossAxisCount: 3, crossAxisSpacing: 2, mainAxisSpacing: 5),
                     itemCount: provider.productList.length,
                     itemBuilder: (context, index) => ProductItem(product: provider.productList[index])),
                   ),

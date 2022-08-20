@@ -16,32 +16,38 @@ class ProductItem extends StatelessWidget {
             arguments: product.id);
       },
       child: Card(
-        elevation:3,
+        elevation:5,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        child: Container(
-          padding: EdgeInsets.all(3),
-          decoration: BoxDecoration(
-              color: Colors.white, borderRadius: BorderRadius.circular(10)),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Center(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Container(
+                decoration: BoxDecoration(
+            color: Color(0xffEFEFEF), borderRadius: BorderRadius.only(topLeft: Radius.circular(10),topRight: Radius.circular(10))),
+                alignment: Alignment.center,
+
                 child: FadeInImage.assetNetwork(
                   image: product.imageUrl.toString(),
-                  height: 75,
+                  height: 60,
                   placeholder: "assets/images/photos.png",
                   fadeInCurve: Curves.bounceInOut,
                   fadeInDuration: const Duration(seconds: 2),
                 ),
               ),
-            Spacer(),
-            Divider(),
-              Text(
+            ),
+         SizedBox(height: 5,),
+            Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: Text(
                 product.name.toString(),
                 textAlign: TextAlign.start,
                 style: TextStyle(fontWeight: FontWeight.w500, fontSize: 13),
               ),
-              Row(
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 5,right: 5,bottom: 5),
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
@@ -52,9 +58,9 @@ class ProductItem extends StatelessWidget {
                       onTap: (){},
                       child: Icon(Icons.shopping_cart_outlined,size: 20, color: Colors.red,))
                 ],
-              )
-            ],
-          ),
+              ),
+            )
+          ],
         ),
       ),
     );
