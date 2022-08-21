@@ -6,6 +6,7 @@ import 'package:e_commerce_user_app/pages/product_details_page.dart';
 import 'package:e_commerce_user_app/pages/products_page.dart';
 import 'package:e_commerce_user_app/pages/regestration_page.dart';
 import 'package:e_commerce_user_app/pages/user_profile.dart';
+import 'package:e_commerce_user_app/providers/cart_provider.dart';
 import 'package:e_commerce_user_app/providers/order_provider.dart';
 import 'package:e_commerce_user_app/providers/product_provider.dart';
 import 'package:e_commerce_user_app/providers/user_provider.dart';
@@ -25,6 +26,9 @@ void main() async {
     ),
     ChangeNotifierProvider(
       create: (context) => UserProvider(),
+    ),
+    ChangeNotifierProvider(
+      create: (context) => CartProvider(),
     ),
   ], child: const MyApp()));
 }

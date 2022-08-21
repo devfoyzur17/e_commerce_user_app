@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:e_commerce_user_app/models/cart_model.dart';
+import 'package:e_commerce_user_app/models/product_model.dart';
 
 import '../models/user_model.dart';
 
@@ -6,6 +8,7 @@ class DBHelper {
   static String collectionCategory = "Category";
   static String collectionProducts = "Products";
   static String collectionUsers = "User";
+  static String collectionCart = "Cart";
   static String collectionOrder = "Order";
   static String collectionOrderDetails = "OrderDetails";
   static String collectionOrderSettings = "Setting";
@@ -13,11 +16,51 @@ class DBHelper {
 
   static final FirebaseFirestore _db = FirebaseFirestore.instance;
 
+  static Future<void> addToCart(String uid, CartModel cartModel) {
+    return _db
+        .collection(collectionUsers)
+        .doc(uid)
+        .collection(collectionCart)
+        .doc(cartModel.productId)
+        .set(cartModel.toMap());
+  }
+  static Future<void> removeFromCart(String uid, String productId) {
+    return _db
+        .collection(collectionUsers)
+        .doc(uid)
+        .collection(collectionCart)
+        .doc(productId)
+        .delete();
+  }
+
+
+
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllCategories() =>
       _db.collection(collectionCategory).snapshots();
 
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllProducts() =>
       _db.collection(collectionProducts).snapshots();
+
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllCartItems(
+          String uid) =>
+      _db
+          .collection(collectionUsers)
+          .doc(uid)
+          .collection(collectionCart)
+          .snapshots();
+
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllProductsByCategory(
+          String category) =>
+      _db
+          .collection(collectionProducts)
+          .where(productCategory, isEqualTo: category)
+          .snapshots();
+
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllFeatureProducts() =>
+      _db
+          .collection(collectionProducts)
+          .where(productFeatured, isEqualTo: true)
+          .snapshots();
 
   static Future<DocumentSnapshot<Map<String, dynamic>>>
       getAllOrderConstants() => _db

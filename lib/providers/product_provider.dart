@@ -11,26 +11,41 @@ import '../models/purchase_model.dart';
 
 class ProductProvider extends ChangeNotifier {
   List<ProductModel> productList = [];
+  List<ProductModel> featureProductList = [];
   List<PurchaseModel> purchaseListOfSpecificProduct = [];
   List<CategoryModel> categoryList = [];
   List<String> categoryNameList = [];
-
 
   getAllCategories() {
     DBHelper.getAllCategories().listen((event) {
       categoryList = List.generate(event.docs.length,
           (index) => CategoryModel.fromMap(event.docs[index].data()));
-      categoryNameList = List.generate(categoryList.length, (index) => categoryList[index].catName!);
+      categoryNameList = List.generate(
+          categoryList.length, (index) => categoryList[index].catName!);
       categoryNameList.insert(0, "All");
-
 
       notifyListeners();
     });
-
   }
 
   getAllProducts() {
     DBHelper.getAllProducts().listen((event) {
+      productList = List.generate(event.docs.length,
+          (index) => ProductModel.fromMap(event.docs[index].data()));
+      notifyListeners();
+    });
+  }
+
+  getAllFeatureProducts() {
+    DBHelper.getAllFeatureProducts().listen((event) {
+      featureProductList = List.generate(event.docs.length,
+          (index) => ProductModel.fromMap(event.docs[index].data()));
+      notifyListeners();
+    });
+  }
+
+  getAllProductsByCategory(String category) {
+    DBHelper.getAllProductsByCategory(category).listen((event) {
       productList = List.generate(event.docs.length,
           (index) => ProductModel.fromMap(event.docs[index].data()));
       notifyListeners();
@@ -42,7 +57,8 @@ class ProductProvider extends ChangeNotifier {
 
   Future<String> updateImage(XFile xFile) async {
     final imageName = DateTime.now().microsecondsSinceEpoch.toString();
-    final photoRef = FirebaseStorage.instance.ref().child("UserImage/$imageName");
+    final photoRef =
+        FirebaseStorage.instance.ref().child("UserImage/$imageName");
     final uploadTask = photoRef.putFile(File(xFile.path));
     final snapshot = await uploadTask.whenComplete(() => null);
     return snapshot.ref.getDownloadURL();

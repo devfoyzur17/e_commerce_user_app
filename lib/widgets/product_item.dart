@@ -1,5 +1,7 @@
+import 'package:e_commerce_user_app/providers/cart_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../models/product_model.dart';
 import '../pages/product_details_page.dart';
@@ -76,13 +78,19 @@ class ProductItem extends StatelessWidget {
                     "৳${product.salePrice}",
                     style: TextStyle(color: Color(0xff666666), fontSize: 12),
                   ),
-                  InkWell(
-                      onTap: () {},
-                      child: Icon(
-                        Icons.shopping_cart_outlined,
-                        size: 20,
-                        color: Theme.of(context).primaryColor,
-                      ))
+                  Consumer<CartProvider>(
+                    builder: (context, provider, child) {
+                      final isInCart = provider.isInCart(product.id!);
+                      return  InkWell(
+                          onTap: () {},
+                          child: Icon(
+                        isInCart? Icons.remove_shopping_cart_outlined :  Icons.shopping_cart_outlined,
+                            size: 20,
+                            color: Theme.of(context).primaryColor,
+                          ));
+                    }
+
+                  )
                 ],
               ),
             )
