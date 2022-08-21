@@ -219,6 +219,7 @@ class _LoginPageState extends State<LoginPage> {
                                 final userModel = UserModel(
                                   uid: value.user!.uid,
                                   email: value.user!.email!,
+                                  image: value.user!.photoURL,
                                   name: value.user!.displayName ??
                                       "Name not available",
                                   mobile: value.user!.phoneNumber ??

@@ -6,16 +6,21 @@ import 'package:provider/provider.dart';
 import '../models/product_model.dart';
 import '../pages/product_details_page.dart';
 
-class ProductItem extends StatelessWidget {
+class ProductItem extends StatefulWidget {
   final ProductModel product;
   const ProductItem({Key? key, required this.product}) : super(key: key);
 
+  @override
+  State<ProductItem> createState() => _ProductItemState();
+}
+
+class _ProductItemState extends State<ProductItem> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
         Navigator.pushNamed(context, ProductDetailsPage.routeName,
-            arguments: product.id);
+            arguments: widget.product.id);
       },
       child: Card(
         elevation: 5,
@@ -37,7 +42,7 @@ class ProductItem extends StatelessWidget {
                             topRight: Radius.circular(10))),
                     alignment: Alignment.center,
                     child: FadeInImage.assetNetwork(
-                      image: product.imageUrl.toString(),
+                      image: widget.product.imageUrl.toString(),
                       height: 60,
                       placeholder: "assets/images/photos.png",
                       fadeInCurve: Curves.bounceInOut,
@@ -64,7 +69,7 @@ class ProductItem extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(5.0),
               child: Text(
-                product.name.toString(),
+                widget.product.name.toString(),
                 textAlign: TextAlign.start,
                 style: TextStyle(fontWeight: FontWeight.w500, fontSize: 13),
               ),
@@ -75,14 +80,18 @@ class ProductItem extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "৳${product.salePrice}",
+                    "৳${widget.product.salePrice}",
                     style: TextStyle(color: Color(0xff666666), fontSize: 12),
                   ),
                   Consumer<CartProvider>(
                     builder: (context, provider, child) {
-                      final isInCart = provider.isInCart(product.id!);
+                      final isInCart = provider.isInCart(widget.product.id!);
                       return  InkWell(
-                          onTap: () {},
+                          onTap: () {
+
+
+
+                          },
                           child: Icon(
                         isInCart? Icons.remove_shopping_cart_outlined :  Icons.shopping_cart_outlined,
                             size: 20,

@@ -24,6 +24,8 @@ class DBHelper {
         .doc(cartModel.productId)
         .set(cartModel.toMap());
   }
+
+
   static Future<void> removeFromCart(String uid, String productId) {
     return _db
         .collection(collectionUsers)
