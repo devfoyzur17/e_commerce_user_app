@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:e_commerce_user_app/models/address_model.dart';
 
 class UserModel {
   String uid;
@@ -6,6 +7,7 @@ class UserModel {
   String email;
   String? mobile;
   String? image;
+  AddressModel? address;
   Timestamp userCreationTime;
   String? deviceToken;
 
@@ -15,6 +17,7 @@ class UserModel {
     required this.email,
     this.mobile,
     this.image,
+    this.address,
     required this.userCreationTime,
     this.deviceToken,
   });
@@ -26,6 +29,7 @@ class UserModel {
       "mobile": mobile,
       "email": email,
       "image": image,
+      "address": address,
       "deviceToken": deviceToken,
       "userCreationTime": userCreationTime
     };
@@ -37,6 +41,7 @@ class UserModel {
         mobile: map["mobile"],
         email: map["email"],
         image: map["image"],
+        address: map["address"],
         deviceToken: map["deviceToken"],
         userCreationTime: map['userCreationTime'],
       );

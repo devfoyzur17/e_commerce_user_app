@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../models/cart_model.dart';
 import '../models/product_model.dart';
 import '../pages/product_details_page.dart';
 
@@ -89,6 +90,17 @@ class _ProductItemState extends State<ProductItem> {
                       return  InkWell(
                           onTap: () {
 
+                            if(isInCart){
+                              provider.removeFromCart(widget.product.id!);
+                            }else{
+                              final cartModel = CartModel(
+                                productId: widget.product.id!,
+                                productName: widget.product.name,
+                                salePrice: widget.product.salePrice,
+                                imageUrl: widget.product.imageUrl,
+                              );
+                              provider.addToCart(cartModel);
+                            }
 
 
                           },

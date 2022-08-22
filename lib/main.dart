@@ -1,3 +1,5 @@
+import 'package:e_commerce_user_app/pages/cart_page.dart';
+import 'package:e_commerce_user_app/pages/checkout_page.dart';
 import 'package:e_commerce_user_app/pages/launcher_page.dart';
 import 'package:e_commerce_user_app/pages/login_page.dart';
 import 'package:e_commerce_user_app/pages/otp_page.dart';
@@ -68,6 +70,8 @@ class MyApp extends StatelessWidget {
         OtpPage.routeName: (context) => const  OtpPage(),
         RegistrationPage.routeName: (context) => const  RegistrationPage(),
         UserProfilePage.routeName: (context) => const  UserProfilePage(),
+        CartPage.routeName: (context) => const  CartPage(),
+        CheckoutPage.routeName: (context) => const  CheckoutPage(),
       },
     );
   }

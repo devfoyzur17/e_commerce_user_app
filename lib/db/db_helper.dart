@@ -25,6 +25,15 @@ class DBHelper {
         .set(cartModel.toMap());
   }
 
+  static Future<void> updateCartItemQuantity(String uid, String pId, num quantity) {
+    return _db
+        .collection(collectionUsers)
+        .doc(uid)
+        .collection(collectionCart)
+        .doc(pId)
+        .update({cartProductQuantity : quantity});
+  }
+
 
   static Future<void> removeFromCart(String uid, String productId) {
     return _db

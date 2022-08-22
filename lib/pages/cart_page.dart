@@ -1,0 +1,82 @@
+import 'package:e_commerce_user_app/pages/checkout_page.dart';
+import 'package:e_commerce_user_app/providers/cart_provider.dart';
+import 'package:e_commerce_user_app/widgets/cart_item.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+class CartPage extends StatelessWidget {
+  static const routeName = "cart-page";
+  const CartPage({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title:const Text("My Cart"),
+        actions: [
+          IconButton(onPressed: (){}, icon: Icon(Icons.clear), tooltip: "Clear Items",)
+        ],
+      ),
+      
+      body: Consumer<CartProvider>(
+        builder: (context, provider, child) => 
+         Column(
+          children: [
+            
+            Expanded(child: ListView.builder(
+              itemCount: provider.cartList.length,
+                itemBuilder: (context, index) {
+                final cartModel = provider.cartList[index];
+                return CartItem(cartModel: cartModel, priceWithQuantity: provider.itemPriceWithQuantity(cartModel),
+                  onIncrease: () {
+                  provider.increaseQuantity(cartModel);
+                  },
+                  onDecrease: () {
+                  provider.decreaseQuantity(cartModel);
+                  },
+                  onDelete: () {
+                  provider.removeFromCart(cartModel.productId!);
+                  },
+                );
+                  
+              }
+            
+            )),
+            
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Card(
+                elevation: 5,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("Subtotal ৳${provider.getCartSumtotal()}", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),),
+
+                      ElevatedButton(onPressed:
+                          provider.totalItemsInCart ==0? null:
+                          (){
+                        Navigator.pushNamed(context, CheckoutPage.routeName);
+                          }, child: Text("Checkout"))
+                    ],
+                  ),
+                ),
+              ),
+            )
+            
+            
+            
+          ],
+        ),
+      ),
+
+
+
+
+
+    );
+
+  }
+}

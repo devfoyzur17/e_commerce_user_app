@@ -1,4 +1,5 @@
-import 'package:carousel_slider/carousel_slider.dart';
+
+import 'package:e_commerce_user_app/pages/cart_page.dart';
 import 'package:e_commerce_user_app/providers/cart_provider.dart';
 import 'package:e_commerce_user_app/widgets/app_slider.dart';
 import 'package:e_commerce_user_app/widgets/main_drawer.dart';
@@ -42,29 +43,32 @@ class _ProductPageState extends State<ProductPage> {
 
         elevation: 0,
         actions: [
-          Stack(
-            clipBehavior: Clip.none,
-            alignment: Alignment.center,
-            children: [
-              Icon(
-                Icons.shopping_cart,
-              ),
-              Positioned(
-                left: 10,
-                top: 10,
-                child: Container(
-                  padding: EdgeInsets.all(1),
-                  alignment: Alignment.center,
-                  width: 16,
-                  height: 16,
-                  decoration: BoxDecoration(
-                      color: Color(0xffff704d), shape: BoxShape.circle),
-                  child: Consumer<CartProvider>(
-                      builder: (context, provider, child) => FittedBox(
-                          child: Text(provider.totalItemsInCart.toString()))),
+          InkWell(
+            onTap: ()=> Navigator.pushNamed(context, CartPage.routeName),
+            child: Stack(
+              clipBehavior: Clip.none,
+              alignment: Alignment.center,
+              children: [
+                Icon(
+                  Icons.shopping_cart,
                 ),
-              )
-            ],
+                Positioned(
+                  left: 10,
+                  top: 10,
+                  child: Container(
+                    padding: EdgeInsets.all(1),
+                    alignment: Alignment.center,
+                    width: 16,
+                    height: 16,
+                    decoration: BoxDecoration(
+                        color: Color(0xffff704d), shape: BoxShape.circle),
+                    child: Consumer<CartProvider>(
+                        builder: (context, provider, child) => FittedBox(
+                            child: Text(provider.totalItemsInCart.toString()))),
+                  ),
+                )
+              ],
+            ),
           ),
           IconButton(
               onPressed: () {},
@@ -76,6 +80,8 @@ class _ProductPageState extends State<ProductPage> {
       body: NestedScrollView(
         headerSliverBuilder: ((BuildContext context, bool innerBoxIsScrolled) {
           return <Widget>[
+
+
             SliverAppBar(
               expandedHeight: 165,
               flexibleSpace: FlexibleSpaceBar(
@@ -86,6 +92,7 @@ class _ProductPageState extends State<ProductPage> {
               floating: true,
               elevation: 0,
               backgroundColor: Colors.white.withOpacity(0),
+               
             ),
           ];
         }),
