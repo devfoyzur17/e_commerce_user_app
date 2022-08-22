@@ -45,7 +45,7 @@ class CartPage extends StatelessWidget {
             )),
             
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.only(left: 5,right: 5,bottom: 5),
               child: Card(
                 elevation: 5,
                 child: Padding(
@@ -53,13 +53,20 @@ class CartPage extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("Subtotal ৳${provider.getCartSumtotal()}", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),),
+                      Text("Subtotal:", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),),
+                      Text("৳${provider.getCartSumtotal()}", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),),
 
-                      ElevatedButton(onPressed:
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15)
+                          )
+                        ),
+                          onPressed:
                           provider.totalItemsInCart ==0? null:
                           (){
                         Navigator.pushNamed(context, CheckoutPage.routeName);
-                          }, child: Text("Checkout"))
+                          }, child:const Text("Checkout"))
                     ],
                   ),
                 ),

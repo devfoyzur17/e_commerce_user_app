@@ -1,10 +1,10 @@
-
 import 'package:e_commerce_user_app/providers/cart_provider.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CheckoutPage extends StatefulWidget {
-  static const routeName ="check-out";
+  static const routeName = "check-out";
   const CheckoutPage({Key? key}) : super(key: key);
 
   @override
@@ -20,12 +20,12 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
     super.didChangeDependencies();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("Checkout"),
-
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -34,27 +34,46 @@ class _CheckoutPageState extends State<CheckoutPage> {
             child: ListView(
               padding: EdgeInsets.all(8),
               children: [
-                Text("Product Info", style: Theme.of(context).textTheme.headline6,textAlign: TextAlign.center,),
-                  SizedBox(height: 10,),
+                Text(
+                  "Product Info",
+                  style: Theme.of(context).textTheme.headline6,
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
                 Card(
                   child: Column(
-                    children: cartProvider.cartList.map((cartModel) =>
-                    ListTile(
-                      title: Text(cartModel.productName!),
-                      trailing: Text("${cartModel.quantity}* ৳${cartModel.salePrice}"),
-                    )
-                    ).toList(),
+                    children: cartProvider.cartList
+                        .map((cartModel) => ListTile(
+                              title: Text(cartModel.productName!),
+                              trailing: Text(
+                                  "${cartModel.quantity}* ৳${cartModel.salePrice}"),
+                            ))
+                        .toList(),
                   ),
                 ),
-                SizedBox(height: 10,),
-                Text("Payment Info", style: Theme.of(context).textTheme.headline6,textAlign: TextAlign.center,),
-
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  "Payment Info",
+                  style: Theme.of(context).textTheme.headline6,
+                  textAlign: TextAlign.center,
+                ),
               ],
             ),
           ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ElevatedButton(
 
-          ElevatedButton(onPressed: (){}, child: Text("Proceed to order"))
-
+                style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15))),
+                onPressed: () {},
+                child: const Text("Proceed to order")),
+          )
         ],
       ),
     );

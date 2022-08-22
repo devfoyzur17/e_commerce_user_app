@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/product_provider.dart';
 import '../widgets/product_item.dart';
+import '../widgets/show_loading.dart';
 
 class ProductPage extends StatefulWidget {
   static const routeName = "product-page";
@@ -136,7 +137,7 @@ class _ProductPageState extends State<ProductPage> {
               ),
               provider.productList.isEmpty
                   ? const Center(
-                      child: Text("No item found"),
+                      child: ShowLoading(),
                     )
                   : Expanded(
                       child: GridView.builder(
