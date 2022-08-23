@@ -59,6 +59,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   child: Column(
                     children: cartProvider.cartList
                         .map((cartModel) => ListTile(
+                      dense: true,
                               title: Text(cartModel.productName!),
                               trailing: Text(
                                   "${cartModel.quantity}* ৳${cartModel.salePrice}"),

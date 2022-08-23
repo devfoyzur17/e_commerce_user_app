@@ -58,23 +58,19 @@ class AppSlider extends StatelessWidget {
                               right: 0,
                             ),
                             Positioned(
-                              child: Column(
-                                children: [
-                                  CircleAvatar(
-                                    
-                                    child: Text(product.category == "Camera"
-                                        ? "20%"
-                                        : "5% ", style: TextStyle(fontWeight: FontWeight.w500),),
+                              child: Container(
+                                
 
-                                  ),
-                                  Text(
-                                    "Discount",
-                                    style: TextStyle(
-                                        color: Theme.of(context).primaryColor,
-                                        fontWeight: FontWeight.w500),
-                                  )
-                                ],
+                                child: Text(product.category!,
+                                  style: TextStyle(fontWeight: FontWeight.w500,color: Colors.white,),),
+                             
+                                padding: EdgeInsets.all(5),
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).primaryColor.withOpacity(0.8),
+                                  borderRadius: BorderRadius.circular(10)
+                                ),
                               ),
+
                               right: 10,
                               top: 10,
                             )

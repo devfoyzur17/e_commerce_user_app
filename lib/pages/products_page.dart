@@ -135,12 +135,15 @@ class _ProductPageState extends State<ProductPage> {
                       );
                     }),
               ),
-              provider.productList.isEmpty
-                  ? const Center(
-                      child: ShowLoading(),
-                    )
-                  : Expanded(
-                      child: GridView.builder(
+              Expanded(
+                      child:  provider.productList.isEmpty
+                          ?  Center(
+                        child: ListTile(
+                          title: ShowLoading(),
+                          subtitle: Text("No product found", textAlign: TextAlign.center,style: TextStyle(color:  Theme.of(context).primaryColor ),),
+                        ),
+                      )
+                          :GridView.builder(
                           padding:
                               const EdgeInsets.only(left: 5, right: 5, top: 5),
                           gridDelegate:
