@@ -14,4 +14,16 @@ class OrderProvider extends ChangeNotifier {
    orderConstantsModel = OrderConstantsModel.fromMap(snapshot.data()!);
    notifyListeners();
   }
+
+  num getDiscountAmount(num subtotal){
+    return (subtotal * orderConstantsModel.discount)/100;
+  }
+  num getVatAmount(num subtotal){
+    final priceAfterDiscount = subtotal-getDiscountAmount(subtotal);
+    return (priceAfterDiscount * orderConstantsModel.vat)/100;
+  }
+
+  num getGrandTotal(num subtotal){
+    return (subtotal-getDiscountAmount(subtotal))+getVatAmount(subtotal)+orderConstantsModel.deliveryCharge;
+  }
 }
