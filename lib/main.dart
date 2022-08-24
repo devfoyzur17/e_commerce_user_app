@@ -7,6 +7,7 @@ import 'package:e_commerce_user_app/pages/phone_verification.dart';
 import 'package:e_commerce_user_app/pages/product_details_page.dart';
 import 'package:e_commerce_user_app/pages/products_page.dart';
 import 'package:e_commerce_user_app/pages/regestration_page.dart';
+import 'package:e_commerce_user_app/pages/user_address_page.dart';
 import 'package:e_commerce_user_app/pages/user_profile.dart';
 import 'package:e_commerce_user_app/providers/cart_provider.dart';
 import 'package:e_commerce_user_app/providers/order_provider.dart';
@@ -72,6 +73,7 @@ class MyApp extends StatelessWidget {
         UserProfilePage.routeName: (context) => const  UserProfilePage(),
         CartPage.routeName: (context) => const  CartPage(),
         CheckoutPage.routeName: (context) => const  CheckoutPage(),
+        UserAddressPage.routeName: (context) =>   const UserAddressPage(),
       },
     );
   }

@@ -9,6 +9,7 @@ class DBHelper {
   static String collectionProducts = "Products";
   static String collectionUsers = "User";
   static String collectionCart = "Cart";
+  static String collectionCities = "cities";
   static String collectionOrder = "Order";
   static String collectionOrderDetails = "OrderDetails";
   static String collectionOrderSettings = "Setting";
@@ -51,6 +52,10 @@ class DBHelper {
 
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllProducts() =>
       _db.collection(collectionProducts).snapshots();
+
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getAllCities() =>
+      _db.collection(collectionCities).snapshots();
+
 
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllCartItems(
           String uid) =>

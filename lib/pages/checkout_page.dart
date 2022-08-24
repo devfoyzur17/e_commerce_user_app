@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_commerce_user_app/auth/auth_service.dart';
+import 'package:e_commerce_user_app/pages/user_address_page.dart';
 import 'package:e_commerce_user_app/providers/cart_provider.dart';
 import 'package:e_commerce_user_app/providers/user_provider.dart';
 import 'package:flutter/cupertino.dart';
@@ -22,19 +23,25 @@ class _CheckoutPageState extends State<CheckoutPage> {
   late OrderProvider orderProvider;
   late UserProvider userProvider;
   String groupValue = "COD";
+  bool isFirst = true;
 
   @override
   void didChangeDependencies() {
-    cartProvider = Provider.of<CartProvider>(context);
-    orderProvider = Provider.of<OrderProvider>(context);
-    userProvider = Provider.of<UserProvider>(context);
-    orderProvider.getOrderConstants();
+    if (isFirst) {
+      cartProvider = Provider.of<CartProvider>(context);
+      orderProvider = Provider.of<OrderProvider>(context);
+
+      userProvider = Provider.of<UserProvider>(context, listen: false);
+      orderProvider.getOrderConstants();
+      isFirst = false;
+    }
 
     super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
+    print("Build called");
 
     return Scaffold(
       appBar: AppBar(
@@ -59,7 +66,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   child: Column(
                     children: cartProvider.cartList
                         .map((cartModel) => ListTile(
-                      dense: true,
+                              dense: true,
                               title: Text(cartModel.productName!),
                               trailing: Text(
                                   "${cartModel.quantity}* ৳${cartModel.salePrice}"),
@@ -84,27 +91,38 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         dense: true,
                       ),
                       ListTile(
-                        leading: Text("Discount(${orderProvider.orderConstantsModel.discount}%)"),
-                        trailing: Text("৳${orderProvider.getDiscountAmount(cartProvider.getCartSumtotal())}"),
+                        leading: Text(
+                            "Discount(${orderProvider.orderConstantsModel.discount}%)"),
+                        trailing: Text(
+                            "৳${orderProvider.getDiscountAmount(cartProvider.getCartSumtotal())}"),
                         dense: true,
                       ),
                       ListTile(
                         leading: Text("Delivery Charge:"),
-                        trailing: Text("৳${orderProvider.orderConstantsModel.deliveryCharge}"),
+                        trailing: Text(
+                            "৳${orderProvider.orderConstantsModel.deliveryCharge}"),
                         dense: true,
                       ),
-
                       ListTile(
                         leading: Text("Vat(15%)"),
-                        trailing: Text("৳${orderProvider.getVatAmount(cartProvider.getCartSumtotal())}"),
+                        trailing: Text(
+                            "৳${orderProvider.getVatAmount(cartProvider.getCartSumtotal())}"),
                         dense: true,
                       ),
                       Divider(),
                       ListTile(
-                        leading: Text("Grand total:", style: TextStyle(color: Colors.red),),
-                        trailing: Text("৳${orderProvider.getGrandTotal(cartProvider.getCartSumtotal())}", style: TextStyle(color: Colors.red, fontWeight: FontWeight.w500, fontSize: 16),),
+                        leading: Text(
+                          "Grand total:",
+                          style: TextStyle(color: Colors.red),
+                        ),
+                        trailing: Text(
+                          "৳${orderProvider.getGrandTotal(cartProvider.getCartSumtotal())}",
+                          style: TextStyle(
+                              color: Colors.red,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16),
+                        ),
                         dense: true,
-
                       ),
                     ],
                   ),
@@ -117,35 +135,46 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   style: Theme.of(context).textTheme.headline6,
                   textAlign: TextAlign.center,
                 ),
-                SizedBox(height: 5,),
+                SizedBox(
+                  height: 5,
+                ),
                 Card(
-                  child:  StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
-                    stream:  userProvider.getUserByUid(AuthService.user!.uid),
+                  child: StreamBuilder<DocumentSnapshot<Map<String, dynamic>>>(
+                    stream: userProvider.getUserByUid(AuthService.user!.uid),
                     builder: (context, snapshot) {
-                      if(snapshot.hasData){
-                        final userModel = UserModel.fromMap(snapshot.data!.data()!);
+                      if (snapshot.hasData) {
+                        final userModel =
+                            UserModel.fromMap(snapshot.data!.data()!);
                         final addressModel = userModel.address;
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text(addressModel == null ? "No address found" : "${addressModel.streetAddress}\n ${addressModel.area}, ${addressModel.city}\n${addressModel.zipCode}"),
+                              Text(addressModel == null
+                                  ? "No address found"
+                                  : "${addressModel.streetAddress}\n ${addressModel.area}, ${addressModel.city}\n${addressModel.zipCode}"),
                               ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15)
-                                  )
-                                ),
-                                  onPressed: (){}, child: Text("Change"))
+                                  style: ElevatedButton.styleFrom(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(15))),
+                                  onPressed: () {
+                                    Navigator.pushNamed(context, UserAddressPage.routeName);
+                                  },
+                                  child: Text("Change"))
                             ],
                           ),
                         );
                       }
-                      if(snapshot.hasError){
-                        return Center(child: Text("Failed to face data"),);
+                      if (snapshot.hasError) {
+                        return Center(
+                          child: Text("Failed to face data"),
+                        );
                       }
-                      return Center(child: Text("Feacthing address..."),);
+                      return Center(
+                        child: Text("Feacthing address..."),
+                      );
                     },
                   ),
                 ),
@@ -183,8 +212,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           leading: Radio<String>(
                             value: "Online",
                             groupValue: groupValue,
-                            fillColor: MaterialStateColor.resolveWith((states) =>
-                                groupValue == "Online" ? Colors.red : Colors.grey),
+                            fillColor: MaterialStateColor.resolveWith(
+                                (states) => groupValue == "Online"
+                                    ? Colors.red
+                                    : Colors.grey),
                             onChanged: (value) {
                               setState(() {
                                 groupValue = value as String;

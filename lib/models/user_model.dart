@@ -41,7 +41,7 @@ class UserModel {
         mobile: map["mobile"],
         email: map["email"],
         image: map["image"],
-        address: map["address"],
+        address: AddressModel.fromMap(map["address"]),
         deviceToken: map["deviceToken"],
         userCreationTime: map['userCreationTime'],
       );
