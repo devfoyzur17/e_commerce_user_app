@@ -1,5 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:e_commerce_user_app/auth/auth_service.dart';
 import 'package:e_commerce_user_app/models/address_model.dart';
+import 'package:e_commerce_user_app/providers/user_provider.dart';
+import 'package:provider/provider.dart';
 
 class UserModel {
   String uid;
@@ -41,7 +44,7 @@ class UserModel {
         mobile: map["mobile"],
         email: map["email"],
         image: map["image"],
-        address: AddressModel.fromMap(map["address"]),
+        address: map["address"]==null ? map["address"] : AddressModel.fromMap(map["address"]) ,
         deviceToken: map["deviceToken"],
         userCreationTime: map['userCreationTime'],
       );

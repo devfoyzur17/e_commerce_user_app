@@ -3,6 +3,7 @@ import 'package:e_commerce_user_app/auth/auth_service.dart';
 import 'package:e_commerce_user_app/pages/user_address_page.dart';
 import 'package:e_commerce_user_app/providers/cart_provider.dart';
 import 'package:e_commerce_user_app/providers/user_provider.dart';
+import 'package:e_commerce_user_app/utils/constansts.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -22,7 +23,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
   late CartProvider cartProvider;
   late OrderProvider orderProvider;
   late UserProvider userProvider;
-  String groupValue = "COD";
+  String groupValue = PaymentMethod.cod;
   bool isFirst = true;
 
   @override
@@ -191,12 +192,12 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     children: [
                       Expanded(
                         child: ListTile(
-                          title: Text("COD"),
+                          title: Text(PaymentMethod.cod),
                           leading: Radio<String>(
-                              value: "COD",
+                              value: PaymentMethod.cod,
                               groupValue: groupValue,
                               fillColor: MaterialStateColor.resolveWith(
-                                  (states) => groupValue == "COD"
+                                  (states) => groupValue == PaymentMethod.cod
                                       ? Colors.red
                                       : Colors.grey),
                               onChanged: (value) {
@@ -213,7 +214,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                             value: "Online",
                             groupValue: groupValue,
                             fillColor: MaterialStateColor.resolveWith(
-                                (states) => groupValue == "Online"
+                                (states) => groupValue == PaymentMethod.online
                                     ? Colors.red
                                     : Colors.grey),
                             onChanged: (value) {
