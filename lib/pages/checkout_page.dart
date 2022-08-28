@@ -1,9 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_commerce_user_app/auth/auth_service.dart';
+import 'package:e_commerce_user_app/models/date_model.dart';
+import 'package:e_commerce_user_app/models/order_model.dart';
+import 'package:e_commerce_user_app/pages/order_successfull_page.dart';
+import 'package:e_commerce_user_app/pages/products_page.dart';
 import 'package:e_commerce_user_app/pages/user_address_page.dart';
 import 'package:e_commerce_user_app/providers/cart_provider.dart';
+import 'package:e_commerce_user_app/providers/product_provider.dart';
 import 'package:e_commerce_user_app/providers/user_provider.dart';
 import 'package:e_commerce_user_app/utils/constansts.dart';
+import 'package:e_commerce_user_app/utils/helper_function.dart';
+import 'package:e_commerce_user_app/widgets/show_loading.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -25,6 +32,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
   late UserProvider userProvider;
   String groupValue = PaymentMethod.cod;
   bool isFirst = true;
+  bool _isLoadding = false;
 
   @override
   void didChangeDependencies() {
@@ -88,14 +96,14 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     children: [
                       ListTile(
                         leading: Text("Subtotal:"),
-                        trailing: Text("৳${cartProvider.getCartSumtotal()}"),
+                        trailing: Text("৳${cartProvider.getCartSubtotal()}"),
                         dense: true,
                       ),
                       ListTile(
                         leading: Text(
                             "Discount(${orderProvider.orderConstantsModel.discount}%)"),
                         trailing: Text(
-                            "৳${orderProvider.getDiscountAmount(cartProvider.getCartSumtotal())}"),
+                            "৳${orderProvider.getDiscountAmount(cartProvider.getCartSubtotal())}"),
                         dense: true,
                       ),
                       ListTile(
@@ -107,7 +115,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       ListTile(
                         leading: Text("Vat(15%)"),
                         trailing: Text(
-                            "৳${orderProvider.getVatAmount(cartProvider.getCartSumtotal())}"),
+                            "৳${orderProvider.getVatAmount(cartProvider.getCartSubtotal())}"),
                         dense: true,
                       ),
                       Divider(),
@@ -117,7 +125,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           style: TextStyle(color: Colors.red),
                         ),
                         trailing: Text(
-                          "৳${orderProvider.getGrandTotal(cartProvider.getCartSumtotal())}",
+                          "৳${orderProvider.getGrandTotal(cartProvider.getCartSubtotal())}",
                           style: TextStyle(
                               color: Colors.red,
                               fontWeight: FontWeight.w500,
@@ -146,7 +154,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       if (snapshot.hasData) {
                         final userModel =
                             UserModel.fromMap(snapshot.data!.data()!);
+                        userProvider.userModel = userModel;
                         final addressModel = userModel.address;
+
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Row(
@@ -161,7 +171,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                           borderRadius:
                                               BorderRadius.circular(15))),
                                   onPressed: () {
-                                    Navigator.pushNamed(context, UserAddressPage.routeName);
+                                    Navigator.pushNamed(
+                                        context, UserAddressPage.routeName);
                                   },
                                   child: Text("Change"))
                             ],
@@ -231,17 +242,68 @@ class _CheckoutPageState extends State<CheckoutPage> {
               ],
             ),
           ),
+          _isLoadding? ShowLoading():Container(),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15))),
-                onPressed: () {},
+                onPressed: _saveOrder,
                 child: const Text("Place order")),
           )
         ],
       ),
     );
+  }
+
+  void _saveOrder() {
+    if (userProvider.userModel?.address == null) {
+      showMsg(context, "Please provide a delivery address!");
+      return;
+    }
+  setState(() {
+    _isLoadding = true;
+  });
+    final orderModel = OrderModel(
+      userId: AuthService.user!.uid,
+      orderStatus: OrderStatus.pending,
+      paymentMethod: groupValue,
+      deliveryAddress: userProvider.userModel!.address!,
+      orderDate: DateModel(
+          timestamp: Timestamp.fromDate(DateTime.now()),
+          day: DateTime.now().day,
+          month: DateTime.now().month,
+          year: DateTime.now().year),
+      grandTotal: orderProvider.getGrandTotal(cartProvider.getCartSubtotal()),
+      discount: orderProvider.orderConstantsModel.discount,
+      vat: orderProvider.orderConstantsModel.vat,
+      deliveryCharge: orderProvider.orderConstantsModel.deliveryCharge,
+    );
+
+    orderProvider.addNewOrder(orderModel, cartProvider.cartList)
+        .then((_) {
+
+          orderProvider.updateProductStock(cartProvider.cartList)
+              .then((_) => {
+
+                orderProvider.updateCategoryProductCount(cartProvider.cartList,
+                    context.read<ProductProvider>().categoryList)
+
+
+          }).then((_) {
+            
+            orderProvider.clearUserCartItems(cartProvider.cartList).then((_) {
+
+              Navigator.pushNamedAndRemoveUntil(context, OrderSuccessfulPage.routeName,  ModalRoute.withName(ProductPage.routeName));
+
+
+            });
+
+
+          });
+
+
+    });
   }
 }

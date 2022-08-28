@@ -54,7 +54,7 @@ class CartPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text("Subtotal:", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),),
-                      Text("৳${provider.getCartSumtotal()}", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),),
+                      Text("৳${provider.getCartSubtotal()}", style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),),
 
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(

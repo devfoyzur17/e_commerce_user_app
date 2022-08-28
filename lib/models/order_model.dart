@@ -1,3 +1,5 @@
+import 'package:e_commerce_user_app/models/address_model.dart';
+
 import 'date_model.dart';
 
 
@@ -22,7 +24,7 @@ class OrderModel {
   num discount;
   num vat;
   num deliveryCharge;
-  String deliveryAddress;
+  AddressModel deliveryAddress;
 
   OrderModel(
       {this.orderId,
@@ -47,7 +49,7 @@ class OrderModel {
       orderDiscountKey: discount,
       orderVatKey: vat,
       orderDeliveryChargeKey: deliveryCharge,
-      orderDeliveryAddressKey: deliveryAddress,
+      orderDeliveryAddressKey: deliveryAddress.toMap(),
     };
   }
 
@@ -61,6 +63,6 @@ class OrderModel {
         discount: map[orderDiscountKey],
         vat: map[orderVatKey],
         deliveryCharge: map[orderDeliveryChargeKey],
-        deliveryAddress: map[orderDeliveryAddressKey],
+        deliveryAddress: AddressModel.fromMap(map[orderDeliveryAddressKey]),
       );
 }

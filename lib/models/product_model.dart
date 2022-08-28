@@ -6,6 +6,7 @@ const String productSalePrice = "salePrice";
 const String productFeatured = "featured";
 const String productAvailable = "available";
 const String productImageUrl = "imageUrl";
+const String productStock = "stock";
 
 class ProductModel {
   String? id;
@@ -13,6 +14,7 @@ class ProductModel {
   String? category;
   String? description;
   num salePrice;
+  num stock;
   bool featured;
   bool available;
   String? imageUrl;
@@ -23,6 +25,7 @@ class ProductModel {
       this.category,
       this.description,
       required this.salePrice,
+      this.stock = 10,
       this.featured = true,
       this.available = true,
       this.imageUrl});
@@ -34,6 +37,7 @@ class ProductModel {
       productCategory: category,
       productDescription: description,
       productSalePrice: salePrice,
+      productStock: stock,
       productFeatured: featured,
       productAvailable: available,
       productImageUrl: imageUrl,
@@ -46,6 +50,7 @@ class ProductModel {
         category: map[productCategory],
         description: map[productDescription],
         salePrice: map[productSalePrice],
+        stock: map[productStock] ?? 10,
         featured: map[productFeatured],
         available: map[productAvailable],
         imageUrl: map[productImageUrl],

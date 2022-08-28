@@ -20,7 +20,7 @@ class CartProvider extends ChangeNotifier{
   num itemPriceWithQuantity(CartModel cartModel)=>
   cartModel.salePrice * cartModel.quantity;
 
-  num getCartSumtotal(){
+  num getCartSubtotal(){
     num total =0;
     for(var cartModel in cartList){
       total += cartModel.salePrice * cartModel.quantity;
