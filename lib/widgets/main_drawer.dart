@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:e_commerce_user_app/pages/launcher_page.dart';
+import 'package:e_commerce_user_app/pages/order_page.dart';
 import 'package:e_commerce_user_app/pages/user_profile.dart';
 import 'package:flutter/material.dart';
 
@@ -34,6 +35,13 @@ class MainDrawer extends StatelessWidget {
               },
               leading: Icon(Icons.account_circle),
               title: Text("Profile"),
+            ),
+            ListTile(
+              onTap: () {
+                Navigator.pushNamed(context, OrderPage.routeName);
+              },
+              leading: Icon(Icons.shopping_bag_outlined),
+              title: Text("My Order"),
             ),
             ListTile(
               onTap: () {

@@ -9,6 +9,7 @@ import '../models/category_model.dart';
 import '../models/order_constants_model.dart';
 
 class OrderProvider extends ChangeNotifier {
+  List<OrderModel> orderList=[];
   OrderConstantsModel orderConstantsModel = OrderConstantsModel();
 
 
@@ -41,5 +42,13 @@ class OrderProvider extends ChangeNotifier {
 
   num getGrandTotal(num subtotal){
     return (subtotal-getDiscountAmount(subtotal))+getVatAmount(subtotal)+orderConstantsModel.deliveryCharge;
+  }
+
+  void getOrdersByUser() {
+    DBHelper.getOrdersByUser(AuthService.user!.uid).listen((event) {
+      orderList = List.generate(event.docs.length, (index) =>
+          OrderModel.fromMap(event.docs[index].data()));
+      notifyListeners();
+    });
   }
 }

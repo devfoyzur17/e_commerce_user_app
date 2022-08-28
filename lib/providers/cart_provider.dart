@@ -8,7 +8,10 @@ class CartProvider extends ChangeNotifier{
   List<CartModel> cartList=[];
 
   increaseQuantity(CartModel cartModel) async{
+  if(cartModel.quantity <cartModel.stock){
     await DBHelper.updateCartItemQuantity(AuthService.user!.uid, cartModel.productId!, cartModel.quantity+1);
+
+  }
   }
 
   decreaseQuantity(CartModel cartModel) async{

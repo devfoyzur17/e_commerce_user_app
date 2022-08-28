@@ -117,6 +117,11 @@ class DBHelper {
           .where(productCategory, isEqualTo: category)
           .snapshots();
 
+  static Stream<QuerySnapshot<Map<String, dynamic>>> getOrdersByUser(String uid) =>
+      _db.collection(collectionOrder)
+          .where(orderUserIdKey, isEqualTo: uid)
+          .snapshots();
+
   static Stream<QuerySnapshot<Map<String, dynamic>>> getAllFeatureProducts() =>
       _db
           .collection(collectionProducts)
