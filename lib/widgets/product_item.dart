@@ -1,6 +1,7 @@
 import 'package:e_commerce_user_app/providers/cart_provider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
 
 import '../models/cart_model.dart';
@@ -61,8 +62,28 @@ class _ProductItemState extends State<ProductItem> {
                   ),
                 ),
                 SizedBox(
-                  height: 5,
+                  height: 3,
                 ),
+                Center(
+                  child: RatingBar.builder(
+                    itemSize: 15,
+                    ignoreGestures: true,
+                    initialRating: widget.product.ratting,
+                    minRating: 1,
+                    direction: Axis.horizontal,
+                    allowHalfRating: true,
+                    itemCount: 5,
+                    itemPadding: EdgeInsets.symmetric(horizontal: 1.0),
+                    itemBuilder: (context, _) => Icon(
+                      Icons.star,
+                      color: Colors.amber,
+                    ),
+                    onRatingUpdate: (rating) {
+                      //print(rating);
+                    },
+                  ),
+                ),
+
                 Padding(
                   padding: const EdgeInsets.all(5.0),
                   child: Text(

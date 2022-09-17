@@ -3,6 +3,7 @@ import 'package:e_commerce_user_app/providers/cart_provider.dart';
 import 'package:e_commerce_user_app/providers/order_provider.dart';
 import 'package:e_commerce_user_app/utils/helper_function.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:provider/provider.dart';
 
 import '../models/cart_model.dart';
@@ -43,6 +44,27 @@ class ProductDetailsPage extends StatelessWidget {
                     fit: BoxFit.contain,
                   ),
                 ),
+               Divider(),
+                 Center(
+                   child: RatingBar.builder(
+                     itemSize: 30,
+                      ignoreGestures: true,
+                     initialRating: product.ratting,
+                     minRating: 1,
+                     direction: Axis.horizontal,
+                     allowHalfRating: true,
+                     itemCount: 5,
+                     itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                     itemBuilder: (context, _) => Icon(
+                       Icons.star,
+                       color: Colors.amber,
+                     ),
+                     onRatingUpdate: (rating) {
+                       //print(rating);
+                     },
+                   ),
+                 ),
+                Divider(),
                 ListTile(
                   title: Text(
                     product.name!,
@@ -100,7 +122,9 @@ class ProductDetailsPage extends StatelessWidget {
                           final canRate = await Provider.of<OrderProvider>(context,listen: false).canUserRateThisProduct(product.id!);
                          print(canRate);
                           if(canRate){
-                            showMsg(context, "You can rate this product");
+                            _showRatingBarDialog(context, product, (value) async {
+                              await provider.addNewRating(value, product.id!);
+                            });
                           }else{
                             showMsg(context, "You can't rate for not buying this product");
                           }
@@ -169,5 +193,42 @@ class ProductDetailsPage extends StatelessWidget {
         },
       ),
     );
+  }
+  void _showRatingBarDialog(BuildContext context, ProductModel product, Function(double) onRate) {
+    double userRating = 3.0;
+    showDialog(context: context, builder: (context) => AlertDialog(
+      title: Text('Rate ${product.name!}'),
+      content: RatingBar.builder(
+        initialRating: 3,
+        minRating: 1,
+        direction: Axis.horizontal,
+        allowHalfRating: true,
+        itemCount: 5,
+        itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+        itemBuilder: (context, _) => Icon(
+          Icons.star,
+          color: Colors.amber,
+        ),
+        onRatingUpdate: (rating) {
+          //print(rating);
+          userRating = rating;
+        },
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: const Text('CANCEL'),
+        ),
+        TextButton(
+          onPressed: () {
+            onRate(userRating);
+            Navigator.pop(context);
+          },
+          child: const Text('RATE'),
+        ),
+      ],
+    ),);
   }
 }

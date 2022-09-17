@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:e_commerce_user_app/models/cart_model.dart';
 import 'package:e_commerce_user_app/models/order_model.dart';
 import 'package:e_commerce_user_app/models/product_model.dart';
+import 'package:e_commerce_user_app/models/rating_model.dart';
 import 'package:e_commerce_user_app/utils/constansts.dart';
 
 import '../models/category_model.dart';
@@ -10,6 +11,7 @@ import '../models/user_model.dart';
 class DBHelper {
   static String collectionCategory = "Category";
   static String collectionProducts = "Products";
+  static String collectionRatings = "Ratings";
   static String collectionUsers = "User";
   static String collectionCart = "Cart";
   static String collectionCities = "cities";
@@ -96,7 +98,8 @@ class DBHelper {
   }
 
   static Future<bool> canUserRateThisProduct(String uid, String pid) async {
-    final qSnapshot = await _db.collection(collectionOrder)
+    final qSnapshot = await _db
+        .collection(collectionOrder)
         .where(orderUserIdKey, isEqualTo: uid)
         .where(orderStatusKey, isEqualTo: OrderStatus.delivered)
         .get();
@@ -180,7 +183,28 @@ class DBHelper {
     return _db.collection(collectionUsers).doc(uid).snapshots();
   }
 
+  static Future<QuerySnapshot<Map<String, dynamic>>> getAllRatingByProductId(
+      String pid) {
+    return _db
+        .collection(collectionProducts)
+        .doc(pid)
+        .collection(collectionRatings)
+        .get();
+  }
+
   static Future<void> updateProfile(String uid, Map<String, dynamic> map) {
     return _db.collection(collectionUsers).doc(uid).update(map);
+  }
+
+  static Future<void> addRating(RatingModel ratingModel) {
+    final prodDoc =
+        _db.collection(collectionProducts).doc(ratingModel.productId);
+    final ratingDoc =
+        prodDoc.collection(collectionRatings).doc(ratingModel.userId);
+    return ratingDoc.set(ratingModel.toMap());
+  }
+
+  static Future<void> updateProduct(String pid, Map<String, dynamic> map) {
+    return _db.collection(collectionProducts).doc(pid).update(map);
   }
 }

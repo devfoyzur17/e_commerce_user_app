@@ -148,7 +148,7 @@ class _ProductPageState extends State<ProductPage> {
                               const EdgeInsets.only(left: 5, right: 5, top: 5),
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
-                                  childAspectRatio: 4 / 5,
+                                  childAspectRatio: 5 / 7,
                                   crossAxisCount: 3,
                                   crossAxisSpacing: 5,
                                   mainAxisSpacing: 5),
