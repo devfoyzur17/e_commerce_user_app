@@ -1,4 +1,3 @@
-
 import 'package:e_commerce_user_app/pages/products_page.dart';
 import 'package:flutter/material.dart';
 
@@ -6,7 +5,7 @@ import '../auth/auth_service.dart';
 import 'login_page.dart';
 
 class LauncherPage extends StatefulWidget {
-  static const routeName ="/";
+  static const routeName = "/";
   const LauncherPage({Key? key}) : super(key: key);
 
   @override
@@ -16,24 +15,21 @@ class LauncherPage extends StatefulWidget {
 class _LauncherPageState extends State<LauncherPage> {
   @override
   void initState() {
-
-    Future.delayed(Duration.zero,(){
-      if(AuthService.user == null){
+    Future.delayed(Duration.zero, () {
+      if (AuthService.user == null) {
         Navigator.pushReplacementNamed(context, LoginPage.routeName);
-      }else{
+      } else {
         Navigator.pushReplacementNamed(context, ProductPage.routeName);
       }
     });
 
-
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       body: const CircularProgressIndicator(),
     );
   }
 }
-

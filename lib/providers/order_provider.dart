@@ -44,6 +44,9 @@ class OrderProvider extends ChangeNotifier {
     return (subtotal-getDiscountAmount(subtotal))+getVatAmount(subtotal)+orderConstantsModel.deliveryCharge;
   }
 
+  Future<bool> canUserRateThisProduct(String pid)=>
+      DBHelper.canUserRateThisProduct(AuthService.user!.uid, pid);
+
   void getOrdersByUser() {
     DBHelper.getOrdersByUser(AuthService.user!.uid).listen((event) {
       orderList = List.generate(event.docs.length, (index) =>

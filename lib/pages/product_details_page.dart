@@ -1,7 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:e_commerce_user_app/providers/cart_provider.dart';
+import 'package:e_commerce_user_app/providers/order_provider.dart';
+import 'package:e_commerce_user_app/utils/helper_function.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../models/cart_model.dart';
 import '../models/product_model.dart';
 import '../providers/product_provider.dart';
 
@@ -72,31 +76,84 @@ class ProductDetailsPage extends StatelessWidget {
                         ]),
                   ),
                 ),
+                SizedBox(
+                  height: 20,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                            primary: Theme.of(context).primaryColor,
+                            side: BorderSide(color:Theme.of(context).primaryColor),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10))),
+                        onPressed: () {},
+                        child: Text("Add your comment")),
+                    OutlinedButton(
+                        style: OutlinedButton.styleFrom(
+                            primary: Theme.of(context).primaryColor,
+                            side: BorderSide(color: Theme.of(context).primaryColor),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10))),
+                        onPressed: () async {
+                          final canRate = await Provider.of<OrderProvider>(context,listen: false).canUserRateThisProduct(product.id!);
+                         print(canRate);
+                          if(canRate){
+                            showMsg(context, "You can rate this product");
+                          }else{
+                            showMsg(context, "You can't rate for not buying this product");
+                          }
+                        },
+                        child: Text("Rate this product")),
+                  ],
+                ),
                 Spacer(),
-                Card(
-                  elevation: 10,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20)),
-                  child: Container(
-                    height: 55,
-                    width: MediaQuery.of(context).size.width - 40,
-                    decoration: BoxDecoration(
-                        color: Theme.of(context).primaryColor,
-                        borderRadius: BorderRadius.circular(20)),
-                    child: ListTile(
-                      trailing: Icon(
-                        Icons.shopping_cart,
-                        color: Color(0xfff2f2f2),
-                      ),
-                      title: Text(
-                        "Add to cart",
-                        style: TextStyle(
+                Consumer<CartProvider>(builder: (context, cartProvider, child) {
+                  final isInCart = cartProvider.isInCart(product.id!);
+                  return InkWell(
+                    onTap: () {
+                      if (isInCart) {
+                        cartProvider.removeFromCart(product.id!);
+                      } else {
+                        final cartModel = CartModel(
+                            productId: product.id!,
+                            productName: product.name,
+                            salePrice: product.salePrice,
+                            imageUrl: product.imageUrl,
+                            stock: product.stock,
+                            category: product.category);
+                        cartProvider.addToCart(cartModel);
+                      }
+                    },
+                    child: Card(
+                      elevation: 10,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(20)),
+                      child: Container(
+                        height: 55,
+                        width: MediaQuery.of(context).size.width - 40,
+                        decoration: BoxDecoration(
+                            color: Theme.of(context).primaryColor,
+                            borderRadius: BorderRadius.circular(20)),
+                        child: ListTile(
+                          trailing: Icon(
+                            isInCart
+                                ? Icons.remove_shopping_cart_outlined
+                                : Icons.shopping_cart_outlined,
                             color: Color(0xfff2f2f2),
-                            fontWeight: FontWeight.w500),
+                          ),
+                          title: Text(
+                            isInCart ? "Remove from the cart" : "Add to cart",
+                            style: TextStyle(
+                                color: Color(0xfff2f2f2),
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
+                  );
+                }),
                 SizedBox(height: 10),
               ],
             );
