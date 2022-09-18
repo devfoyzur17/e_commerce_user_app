@@ -103,10 +103,7 @@ class DBHelper {
         .where(orderUserIdKey, isEqualTo: uid)
         .where(orderStatusKey, isEqualTo: OrderStatus.delivered)
         .get();
-    print(uid);
-    print("blablabla");
     if (qSnapshot.docs.isEmpty) return false;
-    print("end");
     bool tag = false;
     for (var snapshot in qSnapshot.docs) {
       final docSnap = await snapshot.reference

@@ -1,4 +1,3 @@
-
 import 'package:e_commerce_user_app/pages/cart_page.dart';
 import 'package:e_commerce_user_app/providers/cart_provider.dart';
 import 'package:e_commerce_user_app/widgets/app_slider.dart';
@@ -36,16 +35,14 @@ class _ProductPageState extends State<ProductPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       appBar: AppBar(
         title: Text(
           "Product",
         ),
-
         elevation: 0,
         actions: [
           InkWell(
-            onTap: ()=> Navigator.pushNamed(context, CartPage.routeName),
+            onTap: () => Navigator.pushNamed(context, CartPage.routeName),
             child: Stack(
               clipBehavior: Clip.none,
               alignment: Alignment.center,
@@ -76,13 +73,10 @@ class _ProductPageState extends State<ProductPage> {
               icon: ImageIcon(AssetImage("assets/images/filter.png"))),
         ],
       ),
-
       drawer: MainDrawer(),
       body: NestedScrollView(
         headerSliverBuilder: ((BuildContext context, bool innerBoxIsScrolled) {
           return <Widget>[
-
-
             SliverAppBar(
               expandedHeight: 165,
               flexibleSpace: FlexibleSpaceBar(
@@ -93,7 +87,6 @@ class _ProductPageState extends State<ProductPage> {
               floating: true,
               elevation: 0,
               backgroundColor: Colors.white.withOpacity(0),
-               
             ),
           ];
         }),
@@ -136,26 +129,31 @@ class _ProductPageState extends State<ProductPage> {
                     }),
               ),
               Expanded(
-                      child:  provider.productList.isEmpty
-                          ?  Center(
+                child: provider.productList.isEmpty
+                    ? Center(
                         child: ListTile(
                           title: ShowLoading(),
-                          subtitle: Text("No product found", textAlign: TextAlign.center,style: TextStyle(color:  Theme.of(context).primaryColor ),),
+                          subtitle: Text(
+                            "No product found",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Theme.of(context).primaryColor),
+                          ),
                         ),
                       )
-                          :GridView.builder(
-                          padding:
-                              const EdgeInsets.only(left: 5, right: 5, top: 5),
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                  childAspectRatio: 5 / 7,
-                                  crossAxisCount: 3,
-                                  crossAxisSpacing: 5,
-                                  mainAxisSpacing: 5),
-                          itemCount: provider.productList.length,
-                          itemBuilder: (context, index) => ProductItem(
-                              product: provider.productList[index])),
-                    ),
+                    : GridView.builder(
+                        padding:
+                            const EdgeInsets.only(left: 5, right: 5, top: 5),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                                childAspectRatio: 5 / 7,
+                                crossAxisCount: 3,
+                                crossAxisSpacing: 5,
+                                mainAxisSpacing: 5),
+                        itemCount: provider.productList.length,
+                        itemBuilder: (context, index) =>
+                            ProductItem(product: provider.productList[index])),
+              ),
             ],
           ),
         ),
