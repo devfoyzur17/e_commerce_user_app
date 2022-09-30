@@ -8,6 +8,7 @@ import 'package:e_commerce_user_app/pages/otp_page.dart';
 import 'package:e_commerce_user_app/pages/phone_verification.dart';
 import 'package:e_commerce_user_app/pages/product_details_page.dart';
 import 'package:e_commerce_user_app/pages/products_page.dart';
+import 'package:e_commerce_user_app/pages/recomanded_page.dart';
 import 'package:e_commerce_user_app/pages/regestration_page.dart';
 import 'package:e_commerce_user_app/pages/user_address_page.dart';
 import 'package:e_commerce_user_app/pages/user_profile.dart';
@@ -69,15 +70,16 @@ class MyApp extends StatelessWidget {
         LoginPage.routeName: (context) => const LoginPage(),
         ProductPage.routeName: (context) => const ProductPage(),
         ProductDetailsPage.routeName: (context) => ProductDetailsPage(),
-        PhoneVerification.routeName: (context) =>   PhoneVerification(),
-        OtpPage.routeName: (context) => const  OtpPage(),
-        RegistrationPage.routeName: (context) => const  RegistrationPage(),
-        UserProfilePage.routeName: (context) => const  UserProfilePage(),
-        CartPage.routeName: (context) => const  CartPage(),
-        CheckoutPage.routeName: (context) => const  CheckoutPage(),
-        UserAddressPage.routeName: (context) =>   const UserAddressPage(),
-        OrderSuccessfulPage.routeName: (context) =>   const OrderSuccessfulPage(),
-        OrderPage.routeName: (context) =>   const OrderPage(),
+        PhoneVerification.routeName: (context) => PhoneVerification(),
+        OtpPage.routeName: (context) => const OtpPage(),
+        RegistrationPage.routeName: (context) => const RegistrationPage(),
+        UserProfilePage.routeName: (context) => const UserProfilePage(),
+        CartPage.routeName: (context) => const CartPage(),
+        CheckoutPage.routeName: (context) => const CheckoutPage(),
+        UserAddressPage.routeName: (context) => const UserAddressPage(),
+        OrderSuccessfulPage.routeName: (context) => const OrderSuccessfulPage(),
+        OrderPage.routeName: (context) => const OrderPage(),
+        RecomandedPage.routeName: (context) => const RecomandedPage(),
       },
     );
   }

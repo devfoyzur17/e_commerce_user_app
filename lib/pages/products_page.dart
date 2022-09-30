@@ -2,6 +2,7 @@ import 'package:e_commerce_user_app/pages/cart_page.dart';
 import 'package:e_commerce_user_app/providers/cart_provider.dart';
 import 'package:e_commerce_user_app/widgets/app_slider.dart';
 import 'package:e_commerce_user_app/widgets/main_drawer.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/product_provider.dart';
@@ -36,6 +37,38 @@ class _ProductPageState extends State<ProductPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
+
+    //todo foreground state
+    FirebaseMessaging.instance.getInitialMessage();
+    FirebaseMessaging.onMessage.listen((message) {
+      if (message.notification != null) {
+        print(message.notification!.title);
+        print(message.notification!.body);
+
+        Navigator.pushNamed(context, message.data["path"]);
+      }
+    });
+
+    // todo App is open but not terminated
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      if (message.notification != null) {
+        print(message.notification!.title);
+        print(message.notification!.body);
+        print(message.data["path"]);
+
+        Navigator.pushNamed(context, message.data["path"]);
+      }
+    });
+
+    //todo when the app is terminated
+    FirebaseMessaging.instance.getInitialMessage().then((message) {
+      if (message != null) {
+        print(message.notification!.title);
+        print(message.notification!.body);
+        print(message.data["path"]);
+        Navigator.pushNamed(context, message.data["path"]);
+      }
+    });
   }
 
   @override
